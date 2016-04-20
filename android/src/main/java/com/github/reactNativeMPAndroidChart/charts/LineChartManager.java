@@ -15,11 +15,9 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.reactNativeMPAndroidChart.utils.BridgeUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class LineChartManager extends SimpleViewManager<LineChart> {
@@ -35,10 +33,43 @@ public class LineChartManager extends SimpleViewManager<LineChart> {
     protected LineChart createViewInstance(ThemedReactContext reactContext) {
         LineChart lineChart = new LineChart(reactContext);
 
-        setRandomData(lineChart);
-        lineChart.invalidate();
+//        setRandomData(lineChart);
+//        lineChart.invalidate();
 
         return lineChart;
+    }
+
+    @ReactProp(name = "data")
+    public void setData(LineChart chart, ReadableMap propMap) {
+
+        if (BridgeUtils.validate(propMap, ReadableType.Array, "xValues") &&
+                BridgeUtils.validate(propMap, ReadableType.Array, "datasets")) {
+
+            LineData lineData = new LineData(BridgeUtils.convertToStringArray(propMap.getArray("xValues")));
+
+            ReadableArray datasets = propMap.getArray("datasets");
+            for (int i = 0; i < datasets.size(); i++) {
+                ReadableMap dataset = datasets.getMap(i);
+
+                // TODO validation
+                ReadableArray yValues = dataset.getArray("yValues");
+                String label = dataset.getString("label");
+
+                ArrayList<Entry> entries = new ArrayList<>(yValues.size());
+                for (int j = 0; j < yValues.size(); j++) {
+                    entries.add(new Entry((float) yValues.getDouble(j), j));
+                }
+
+                LineDataSet lineDataSet = new LineDataSet(entries, label);
+
+                // TODO config
+
+                lineData.addDataSet(lineDataSet);
+            }
+
+            chart.setData(lineData);
+            chart.invalidate();
+        }
     }
 
     /**
@@ -134,6 +165,9 @@ public class LineChartManager extends SimpleViewManager<LineChart> {
 
         // TODO resetCustom function
         // TODO extra
+
+
+        chart.invalidate();     // TODO is this necessary? Looks like enabled is not refreshing without it
     }
 
     private void setRandomData(LineChart lineChart) {

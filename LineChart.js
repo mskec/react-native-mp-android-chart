@@ -8,6 +8,18 @@ const iface = {
   name: 'LineChart',
   propTypes: {
     ...View.propTypes,
+
+    data: PropTypes.shape({
+      datasets: PropTypes.arrayOf(PropTypes.shape({
+        yValues: PropTypes.arrayOf(PropTypes.number),
+        label: PropTypes.string,
+        config: PropTypes.shape({
+
+        })
+      })),
+      xValues: PropTypes.arrayOf(PropTypes.string)
+    }),
+
     legend: PropTypes.shape({
       enabled: PropTypes.bool,
 
