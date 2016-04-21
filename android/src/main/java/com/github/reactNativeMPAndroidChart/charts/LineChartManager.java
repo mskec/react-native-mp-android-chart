@@ -39,37 +39,134 @@ public class LineChartManager extends SimpleViewManager<LineChart> {
         return lineChart;
     }
 
+    /**
+     *
+     * Dataset config details: https://github.com/PhilJay/MPAndroidChart/wiki/DataSet-classes-in-detail
+     */
     @ReactProp(name = "data")
     public void setData(LineChart chart, ReadableMap propMap) {
 
-        if (BridgeUtils.validate(propMap, ReadableType.Array, "xValues") &&
-                BridgeUtils.validate(propMap, ReadableType.Array, "datasets")) {
+        if (!BridgeUtils.validate(propMap, ReadableType.Array, "xValues") ||
+                !BridgeUtils.validate(propMap, ReadableType.Array, "datasets")) {
+            return;
+        }
 
-            LineData lineData = new LineData(BridgeUtils.convertToStringArray(propMap.getArray("xValues")));
+        LineData lineData = new LineData(BridgeUtils.convertToStringArray(propMap.getArray("xValues")));
 
-            ReadableArray datasets = propMap.getArray("datasets");
-            for (int i = 0; i < datasets.size(); i++) {
-                ReadableMap dataset = datasets.getMap(i);
+        ReadableArray datasets = propMap.getArray("datasets");
+        for (int i = 0; i < datasets.size(); i++) {
+            ReadableMap dataset = datasets.getMap(i);
 
-                // TODO validation
-                ReadableArray yValues = dataset.getArray("yValues");
-                String label = dataset.getString("label");
+            // TODO validation
+            ReadableArray yValues = dataset.getArray("yValues");
+            String label = dataset.getString("label");
 
-                ArrayList<Entry> entries = new ArrayList<>(yValues.size());
-                for (int j = 0; j < yValues.size(); j++) {
-                    entries.add(new Entry((float) yValues.getDouble(j), j));
-                }
-
-                LineDataSet lineDataSet = new LineDataSet(entries, label);
-
-                // TODO config
-
-                lineData.addDataSet(lineDataSet);
+            ArrayList<Entry> entries = new ArrayList<>(yValues.size());
+            for (int j = 0; j < yValues.size(); j++) {
+                entries.add(new Entry((float) yValues.getDouble(j), j));
             }
 
-            chart.setData(lineData);
-            chart.invalidate();
+            LineDataSet lineDataSet = new LineDataSet(entries, label);
+
+            // TODO config
+            if (BridgeUtils.validate(dataset, ReadableType.Map, "config")) {
+                ReadableMap config = dataset.getMap("config");
+
+                // Setting main color
+                if (BridgeUtils.validate(config, ReadableType.String, "color")) {
+                    lineDataSet.setColor(Color.parseColor(config.getString("color")));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Array, "colors")) {
+                    lineDataSet.setColors(BridgeUtils.parseColors(config.getArray("colors")));
+                }
+
+                // TODO same for Line-, Bar-, Scatter-, Bubble- & CandleDataSet
+                if (BridgeUtils.validate(config, ReadableType.String, "highlightColor")) {
+                    lineDataSet.setHighLightColor(Color.parseColor(config.getString("highlightColor")));
+                }
+
+                // TODO same for Line-, Bar-, Scatter-, Candle- & RadarDataSet
+                if (BridgeUtils.validate(config, ReadableType.Boolean, "drawHighlightIndicators")) {
+                    lineDataSet.setDrawHighlightIndicators(config.getBoolean("drawHighlightIndicators"));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Boolean, "drawVerticalHighlightIndicator")) {
+                    lineDataSet.setDrawVerticalHighlightIndicator(config.getBoolean("drawVerticalHighlightIndicator"));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Boolean, "drawHorizontalHighlightIndicator")) {
+                    lineDataSet.setDrawHorizontalHighlightIndicator(config.getBoolean("drawHorizontalHighlightIndicator"));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Number, "highlightLineWidth")) {
+                    lineDataSet.setHighlightLineWidth((float) config.getDouble("highlightLineWidth"));
+                }
+
+                // TODO same for Line- & RadarDataSet
+                if (BridgeUtils.validate(config, ReadableType.String, "fillColor")) {
+                    lineDataSet.setFillColor(Color.parseColor(config.getString("fillColor")));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Number, "fillAlpha")) {
+                    lineDataSet.setFillAlpha(config.getInt("fillAlpha"));
+                }
+                // TODO setFillDrawable android.graphics.drawable.Drawable
+                if (BridgeUtils.validate(config, ReadableType.Boolean, "drawFilled")) {
+                    lineDataSet.setDrawFilled(config.getBoolean("drawFilled"));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Number, "lineWidth")) {
+                    float lineWidth = (float) config.getDouble("lineWidth");
+                    if (lineWidth >= 0.2f && lineWidth < 10f) {
+                        lineDataSet.setLineWidth(lineWidth);
+                    }
+                }
+
+                // Only LineDataSet
+                if (BridgeUtils.validate(config, ReadableType.Number, "circleRadius")) {
+                    lineDataSet.setCircleRadius((float) config.getDouble("circleRadius"));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Boolean, "drawCircles")) {
+                    lineDataSet.setDrawCircles(config.getBoolean("drawCircles"));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Boolean, "drawCubic")) {
+                    lineDataSet.setDrawCubic(config.getBoolean("drawCubic"));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Number, "drawCubicIntensity")) {
+                    lineDataSet.setCubicIntensity((float) config.getDouble("drawCubicIntensity"));
+                }
+                if (BridgeUtils.validate(config, ReadableType.String, "circleColor")) {
+                    lineDataSet.setCircleColor(Color.parseColor(config.getString("circleColor")));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Array, "circleColors")) {
+                    lineDataSet.setCircleColors(BridgeUtils.parseColors(config.getArray("circleColors")));
+                }
+                if (BridgeUtils.validate(config, ReadableType.String, "circleColorHole")) {
+                    lineDataSet.setCircleColorHole(Color.parseColor(config.getString("circleColorHole")));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Boolean, "drawCircleHole")) {
+                    lineDataSet.setDrawCircleHole(config.getBoolean("drawCircleHole"));
+                }
+                if (BridgeUtils.validate(config, ReadableType.Map, "dashedLine")) {
+                    ReadableMap dashedLine = config.getMap("dashedLine");
+                    float lineLength = 0;
+                    float spaceLength = 0;
+                    float phase = 0;
+
+                    if (BridgeUtils.validate(dashedLine, ReadableType.Number, "lineLength")) {
+                        lineLength = (float) dashedLine.getDouble("lineLength");
+                    }
+                    if (BridgeUtils.validate(dashedLine, ReadableType.Number, "spaceLength")) {
+                        spaceLength = (float) dashedLine.getDouble("spaceLength");
+                    }
+                    if (BridgeUtils.validate(dashedLine, ReadableType.Number, "phase")) {
+                        phase = (float) dashedLine.getDouble("phase");
+                    }
+
+                    lineDataSet.enableDashedLine(lineLength, spaceLength, phase);
+                }
+            }
+
+            lineData.addDataSet(lineDataSet);
         }
+
+        chart.setData(lineData);
+        chart.invalidate();
     }
 
     /**

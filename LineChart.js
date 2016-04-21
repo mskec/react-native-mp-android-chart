@@ -14,7 +14,42 @@ const iface = {
         yValues: PropTypes.arrayOf(PropTypes.number),
         label: PropTypes.string,
         config: PropTypes.shape({
+          color: PropTypes.string,
+          colors: PropTypes.arrayOf(PropTypes.string),
 
+          highlightColor: PropTypes.string,
+
+          drawHighlightIndicators: PropTypes.bool,
+          drawVerticalHighlightIndicator: PropTypes.bool,
+          drawHorizontalHighlightIndicator: PropTypes.bool,
+          highlightLineWidth: PropTypes.number,
+
+          fillColor: PropTypes.string,
+          fillAlpha: PropTypes.number,
+          drawFilled: PropTypes.bool,
+          lineWidth: (props, propName, componentName) => {
+            let lineWidth = props[propName];
+            if (typeof lineWidth !== 'Number' && lineWidth < 0.2 || lineWidth > 10) {
+              return new Error(
+                `Invalid prop ${propName} supplied to '${componentName}'. Value must be number and between 0.2f and 10f`
+              );
+            }
+          },
+
+          circleRadius: PropTypes.number,
+          drawCircles: PropTypes.bool,
+          drawCubic: PropTypes.bool,
+          drawCubicIntensity: PropTypes.number,
+          circleColor: PropTypes.string,
+          circleColors: PropTypes.arrayOf(PropTypes.string),
+          circleColorHole: PropTypes.string,
+          drawCircleHole: PropTypes.bool,
+
+          dashedLine: PropTypes.shape({
+            lineLength: PropTypes.number.isRequired,
+            spaceLength: PropTypes.number.isRequired,
+            phase: PropTypes.number,
+          })
         })
       })),
       xValues: PropTypes.arrayOf(PropTypes.string)

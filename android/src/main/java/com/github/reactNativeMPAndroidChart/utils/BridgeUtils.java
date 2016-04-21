@@ -1,5 +1,6 @@
 package com.github.reactNativeMPAndroidChart.utils;
 
+import android.graphics.Color;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
@@ -31,6 +32,20 @@ public class BridgeUtils {
                 throw new IllegalArgumentException("Expecting array of strings");
             }
             array[i] = readableArray.getString(i);
+        }
+
+        return array;
+    }
+
+
+    public static int[] parseColors(ReadableArray readableArray) {
+        int[] array = new int[readableArray.size()];
+
+        for (int i = 0; i < readableArray.size(); i++) {
+            if (!ReadableType.String.equals(readableArray.getType(i))) {
+                throw new IllegalArgumentException("Expecting array of strings");
+            }
+            array[i] = Color.parseColor(readableArray.getString(i));
         }
 
         return array;
