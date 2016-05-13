@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.github.reactNativeMPAndroidChart.charts.BarChartManager;
 import com.github.reactNativeMPAndroidChart.charts.LineChartManager;
+import com.github.reactNativeMPAndroidChart.charts.PieChartManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +29,8 @@ public class MPAndroidChartPackage implements ReactPackage {
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
             new LineChartManager(),
-            new BarChartManager()
+            new BarChartManager(),
+            new PieChartManager()
         );
     }
 
