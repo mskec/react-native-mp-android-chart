@@ -43,7 +43,17 @@ public class BarChartManager extends ChartBaseManager<BarChart, BarEntry> {
 
     @Override
     BarEntry createEntry(ReadableArray yValues, int index) {
-        return new BarEntry((float) yValues.getDouble(index), index);
+        BarEntry entry;
+
+        if (ReadableType.Array.equals(yValues.getType(index))) {
+            entry = new BarEntry(BridgeUtils.convertToFloatArray(yValues.getArray(index)), index);
+        } else if (ReadableType.Number.equals(yValues.getType(index))) {
+            entry = new BarEntry((float) yValues.getDouble(index), index);
+        } else {
+            throw new IllegalArgumentException("Unexpected entry type: " + yValues.getType(index));
+        }
+
+        return entry;
     }
 
     @Override

@@ -14,7 +14,12 @@ const iface = {
 
     data: PropTypes.shape({
       datasets: PropTypes.arrayOf(PropTypes.shape({
-        yValues: PropTypes.arrayOf(PropTypes.number),
+        yValues: PropTypes.arrayOf(
+          PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.arrayOf(PropTypes.number)
+          ])
+        ),
         label: PropTypes.string,
         config: PropTypes.shape({
           ...ChartDataSetConfig.common,

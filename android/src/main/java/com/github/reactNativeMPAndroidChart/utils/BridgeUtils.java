@@ -24,6 +24,19 @@ public class BridgeUtils {
         return array;
     }
 
+    public static float[] convertToFloatArray(ReadableArray readableArray) {
+        float[] array = new float[readableArray.size()];
+
+        for (int i = 0; i < readableArray.size(); i++) {
+            if (!ReadableType.Number.equals(readableArray.getType(i))) {
+                throw new IllegalArgumentException("Expecting array of numbers");
+            }
+            array[i] = (float) readableArray.getDouble(i);
+        }
+
+        return array;
+    }
+
     public static String[] convertToStringArray(ReadableArray readableArray) {
         String[] array = new String[readableArray.size()];
 
