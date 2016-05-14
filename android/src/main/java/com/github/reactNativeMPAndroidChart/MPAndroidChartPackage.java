@@ -6,6 +6,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.github.reactNativeMPAndroidChart.charts.BarChartManager;
+import com.github.reactNativeMPAndroidChart.charts.BubbleChartManager;
 import com.github.reactNativeMPAndroidChart.charts.LineChartManager;
 import com.github.reactNativeMPAndroidChart.charts.PieChartManager;
 
@@ -28,8 +29,9 @@ public class MPAndroidChartPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-            new LineChartManager(),
             new BarChartManager(),
+            new BubbleChartManager(),
+            new LineChartManager(),
             new PieChartManager()
         );
     }

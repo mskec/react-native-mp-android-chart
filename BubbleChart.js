@@ -8,20 +8,23 @@ import ChartBase from './ChartBase';
 import ChartDataSetConfig from './ChartDataSetConfig';
 
 const iface = {
-  name: 'PieChart',
+  name: 'BubbleChart',
   propTypes: {
     ...ChartBase.propTypes,
 
-    // TODO PieChart should have only one dataset
     data: PropTypes.shape({
       datasets: PropTypes.arrayOf(PropTypes.shape({
-        yValues: PropTypes.arrayOf(PropTypes.number),
+        yValues: PropTypes.arrayOf(
+          PropTypes.shape({
+            value: PropTypes.number.isRequired,
+            size: PropTypes.number.isRequired
+          })
+        ),
         label: PropTypes.string,
         config: PropTypes.shape({
           ...ChartDataSetConfig.common,
+          ...ChartDataSetConfig.barLineScatterCandleBubble,
 
-          sliceSpace: PropTypes.number,
-          selectionShift: PropTypes.number
         })
       })),
       xValues: PropTypes.arrayOf(PropTypes.string)
@@ -29,4 +32,4 @@ const iface = {
   }
 };
 
-export default requireNativeComponent('MPAndroidPieChart', iface);
+export default requireNativeComponent('MPAndroidBubbleChart', iface);

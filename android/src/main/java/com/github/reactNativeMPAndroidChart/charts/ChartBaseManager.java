@@ -156,6 +156,7 @@ public abstract class ChartBaseManager<T extends Chart<? extends ChartData<? ext
 
     abstract ChartData<IDataSet<U>> createData(String[] xValues);
     abstract IDataSet<U> createDataSet(ArrayList<U> entries, String label);
+    abstract void dataSetConfig(IDataSet<U> dataSet, ReadableMap config);
 
     ArrayList<U> createEntries(ReadableArray yValues) {
         ArrayList<U> entries = new ArrayList<>(yValues.size());
@@ -169,5 +170,4 @@ public abstract class ChartBaseManager<T extends Chart<? extends ChartData<? ext
         return (U) new Entry((float) yValues.getDouble(index), index);
     }
 
-    abstract void dataSetConfig(IDataSet<U> dataSet, ReadableMap config);
 }
