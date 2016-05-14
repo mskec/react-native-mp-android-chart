@@ -116,6 +116,10 @@ public abstract class ChartBaseManager<T extends Chart<? extends ChartData<? ext
         chart.invalidate();     // TODO is this necessary? Looks like enabled is not refreshing without it
     }
 
+    @ReactProp(name = "description")
+    public void setDescription(Chart<ChartData<IDataSet<U>>> chart, String description) {
+        chart.setDescription(description);
+    }
 
     /**
      *

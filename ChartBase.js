@@ -29,7 +29,9 @@ const iface = {
         colors: PropTypes.arrayOf(PropTypes.string),
         labels: PropTypes.arrayOf(PropTypes.string)
       })
-    })
+    }),
+
+    description: PropTypes.string
   }
 };
 
