@@ -9,6 +9,7 @@ import com.github.reactNativeMPAndroidChart.charts.BarChartManager;
 import com.github.reactNativeMPAndroidChart.charts.BubbleChartManager;
 import com.github.reactNativeMPAndroidChart.charts.LineChartManager;
 import com.github.reactNativeMPAndroidChart.charts.PieChartManager;
+import com.github.reactNativeMPAndroidChart.charts.ScatterChartManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,7 +33,8 @@ public class MPAndroidChartPackage implements ReactPackage {
             new BarChartManager(),
             new BubbleChartManager(),
             new LineChartManager(),
-            new PieChartManager()
+            new PieChartManager(),
+            new ScatterChartManager()
         );
     }
 
