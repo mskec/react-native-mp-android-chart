@@ -9,6 +9,8 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.Legend.LegendForm;
+import com.github.mikephil.charting.components.Legend.LegendPosition;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
@@ -64,13 +66,11 @@ public abstract class ChartBaseManager<T extends Chart<? extends ChartData<? ext
         }
 
         // Customizing
-        // TODO make sure position value is in LegendPosition enum, PIECHART_CENTER (only for PieChart)
         if (BridgeUtils.validate(propMap, ReadableType.String, "position")) {
-            legend.setPosition(Legend.LegendPosition.valueOf(propMap.getString("position").toUpperCase()));
+            legend.setPosition(LegendPosition.valueOf(propMap.getString("position").toUpperCase()));
         }
-        // TODO make sure form value is in LegendForm enum
         if (BridgeUtils.validate(propMap, ReadableType.String, "form")) {
-            legend.setForm(Legend.LegendForm.valueOf(propMap.getString("form").toUpperCase()));
+            legend.setForm(LegendForm.valueOf(propMap.getString("form").toUpperCase()));
         }
         if (BridgeUtils.validate(propMap, ReadableType.Number, "formSize")) {
             legend.setFormSize((float) propMap.getDouble("formSize"));

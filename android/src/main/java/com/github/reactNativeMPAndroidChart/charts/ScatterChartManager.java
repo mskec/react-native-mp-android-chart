@@ -52,7 +52,7 @@ public class ScatterChartManager extends ChartBaseManager<ScatterChart, Entry> {
             scatterDataSet.setScatterShapeSize((float) config.getDouble("scatterShapeSize"));
         }
         if (BridgeUtils.validate(config, ReadableType.String, "scatterShape")) {
-            scatterDataSet.setScatterShape(ScatterShape.valueOf(config.getString("scatterShape")));
+            scatterDataSet.setScatterShape(ScatterShape.valueOf(config.getString("scatterShape").toUpperCase()));
         }
         if (BridgeUtils.validate(config, ReadableType.String, "scatterShapeHoleColor")) {
             scatterDataSet.setScatterShapeHoleColor(Color.parseColor(config.getString("scatterShapeHoleColor")));

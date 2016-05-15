@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.github.reactNativeMPAndroidChart.charts.BarChartManager;
 import com.github.reactNativeMPAndroidChart.charts.BubbleChartManager;
+import com.github.reactNativeMPAndroidChart.charts.CandleStickChartManager;
 import com.github.reactNativeMPAndroidChart.charts.LineChartManager;
 import com.github.reactNativeMPAndroidChart.charts.PieChartManager;
 import com.github.reactNativeMPAndroidChart.charts.ScatterChartManager;
@@ -32,6 +33,7 @@ public class MPAndroidChartPackage implements ReactPackage {
         return Arrays.<ViewManager>asList(
             new BarChartManager(),
             new BubbleChartManager(),
+            new CandleStickChartManager(),
             new LineChartManager(),
             new PieChartManager(),
             new ScatterChartManager()
