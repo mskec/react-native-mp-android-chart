@@ -10,6 +10,7 @@ import com.github.reactNativeMPAndroidChart.charts.BubbleChartManager;
 import com.github.reactNativeMPAndroidChart.charts.CandleStickChartManager;
 import com.github.reactNativeMPAndroidChart.charts.LineChartManager;
 import com.github.reactNativeMPAndroidChart.charts.PieChartManager;
+import com.github.reactNativeMPAndroidChart.charts.RadarChartManager;
 import com.github.reactNativeMPAndroidChart.charts.ScatterChartManager;
 
 import java.util.Arrays;
@@ -36,6 +37,7 @@ public class MPAndroidChartPackage implements ReactPackage {
             new CandleStickChartManager(),
             new LineChartManager(),
             new PieChartManager(),
+            new RadarChartManager(),
             new ScatterChartManager()
         );
     }
