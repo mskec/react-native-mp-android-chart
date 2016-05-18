@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.github.mikephil.charting.animation.Easing.EasingOption;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendForm;
@@ -120,6 +121,39 @@ public abstract class ChartBaseManager<T extends Chart<? extends ChartData<? ext
     public void setDescription(Chart<ChartData<IDataSet<U>>> chart, String description) {
         chart.setDescription(description);
     }
+
+    /**
+     * Animations docs: https://github.com/PhilJay/MPAndroidChart/wiki/Animations
+     */
+    @ReactProp(name = "animation")
+    public void setAnimation(Chart<ChartData<IDataSet<U>>> chart, ReadableMap propMap) {
+        Integer durationX = null;
+        Integer durationY = null;
+        EasingOption easingX = EasingOption.Linear;
+        EasingOption easingY = EasingOption.Linear;
+
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "durationX")) {
+            durationX = propMap.getInt("durationX");
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "durationY")) {
+            durationY = propMap.getInt("durationY");
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.String, "easingX")) {
+            easingX = EasingOption.valueOf(propMap.getString("easingX"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.String, "easingY")) {
+            easingY = EasingOption.valueOf(propMap.getString("easingY"));
+        }
+
+        if (durationX != null && durationY != null) {
+            chart.animateXY(durationX, durationY, easingX, easingY);
+        } else if (durationX != null) {
+            chart.animateX(durationX, easingX);
+        } else if (durationY != null) {
+            chart.animateY(durationY, easingY);
+        }
+    }
+
 
     /**
      *

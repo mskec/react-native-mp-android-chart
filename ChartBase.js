@@ -7,6 +7,13 @@ const iface = {
   propTypes: {
     ...View.propTypes,
 
+    animation: PropTypes.shape({
+      durationX: PropTypes.number,
+      durationY: PropTypes.number,
+      easingX: PropTypes.string,
+      easingY: PropTypes.string
+    }),
+
     legend: PropTypes.shape({
       enabled: PropTypes.bool,
 
