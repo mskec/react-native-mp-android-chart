@@ -4,13 +4,17 @@ import {
   View
 } from 'react-native';
 
-import ChartBase from './ChartBase';
+import BarLineChartBase from './BarLineChartBase';
 import ChartDataSetConfig from './ChartDataSetConfig';
 
 const iface = {
   name: 'BarChart',
   propTypes: {
-    ...ChartBase.propTypes,
+    ...BarLineChartBase.propTypes,
+
+    drawValueAboveBar: PropTypes.bool,
+    drawBarShadow: PropTypes.bool,
+    drawHighlightArrow: PropTypes.bool,
 
     data: PropTypes.shape({
       datasets: PropTypes.arrayOf(PropTypes.shape({

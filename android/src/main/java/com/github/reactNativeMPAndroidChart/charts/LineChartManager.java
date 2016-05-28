@@ -17,7 +17,7 @@ import com.github.reactNativeMPAndroidChart.utils.ChartDataSetConfigUtils;
 
 import java.util.ArrayList;
 
-public class LineChartManager extends ChartBaseManager<LineChart, Entry> {
+public class LineChartManager extends BarLineChartBaseManager<LineChart, Entry> {
 
     @Override
     public String getName() {

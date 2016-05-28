@@ -24,6 +24,10 @@ public class ChartDataSetConfigUtils {
         }
 
         // TODO more config to add: https://github.com/PhilJay/MPAndroidChart/wiki/The-DataSet-class
+
+        if (BridgeUtils.validate(config, ReadableType.Boolean, "drawValues")) {
+            dataSet.setDrawValues(config.getBoolean("drawValues"));
+        }
     }
 
     public static void commonBarLineScatterCandleBubbleConfig(BarLineScatterCandleBubbleDataSet dataSet, ReadableMap config) {

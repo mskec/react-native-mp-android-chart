@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -17,7 +18,7 @@ import com.github.reactNativeMPAndroidChart.utils.ChartDataSetConfigUtils;
 
 import java.util.ArrayList;
 
-public class BarChartManager extends ChartBaseManager<BarChart, BarEntry> {
+public class BarChartManager extends BarLineChartBaseManager<BarChart, BarEntry> {
 
     @Override
     public String getName() {
@@ -77,4 +78,18 @@ public class BarChartManager extends ChartBaseManager<BarChart, BarEntry> {
         }
     }
 
+    @ReactProp(name = "drawValueAboveBar")
+    public void setDrawValueAboveBar(BarChart chart, boolean enabled) {
+        chart.setDrawValueAboveBar(enabled);
+    }
+
+    @ReactProp(name = "drawBarShadow")
+    public void setDrawBarShadow(BarChart chart, boolean enabled) {
+        chart.setDrawBarShadow(enabled);
+    }
+
+    @ReactProp(name = "drawHighlightArrow")
+    public void setDrawHighlightArrow(BarChart chart, boolean enabled) {
+        chart.setDrawHighlightArrow(enabled);
+    }
 }

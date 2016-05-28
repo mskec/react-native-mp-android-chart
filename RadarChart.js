@@ -12,6 +12,8 @@ const iface = {
   propTypes: {
     ...ChartBase.propTypes,
 
+    skipWebLineCount: PropTypes.number,
+
     data: PropTypes.shape({
       datasets: PropTypes.arrayOf(PropTypes.shape({
         yValues: PropTypes.arrayOf(PropTypes.number),

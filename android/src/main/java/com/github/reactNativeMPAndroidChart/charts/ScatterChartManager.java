@@ -17,7 +17,7 @@ import com.github.reactNativeMPAndroidChart.utils.ChartDataSetConfigUtils;
 
 import java.util.ArrayList;
 
-public class ScatterChartManager extends ChartBaseManager<ScatterChart, Entry> {
+public class ScatterChartManager extends BarLineChartBaseManager<ScatterChart, Entry> {
 
     @Override
     public String getName() {

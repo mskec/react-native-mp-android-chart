@@ -3,6 +3,7 @@ package com.github.reactNativeMPAndroidChart.charts;
 
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
@@ -45,4 +46,10 @@ public class RadarChartManager extends ChartBaseManager<RadarChart, Entry> {
 
         // RadarDataSet only config
     }
+
+    @ReactProp(name = "skipWebLineCount")
+    public void setSkipWebLineCount(RadarChart chart, int count) {
+        chart.setSkipWebLineCount(count);
+    }
+
 }

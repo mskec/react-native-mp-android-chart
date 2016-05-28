@@ -1,9 +1,11 @@
 package com.github.reactNativeMPAndroidChart.charts;
 
 
+import android.graphics.Color;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
@@ -51,4 +53,55 @@ public class PieChartManager extends ChartBaseManager<PieChart, Entry> {
             pieDataSet.setSelectionShift((float) config.getDouble("selectionShift"));
         }
     }
+
+    @ReactProp(name = "drawSliceText")
+    public void setDrawSliceText(PieChart chart, boolean enabled) {
+        chart.setDrawSliceText(enabled);
+    }
+
+    @ReactProp(name = "usePercentValues")
+    public void setUsePercentValues(PieChart chart, boolean enabled) {
+        chart.setUsePercentValues(enabled);
+    }
+
+    @ReactProp(name = "centerText")
+    public void setCenterText(PieChart chart, String text) {
+        chart.setCenterText(text);
+    }
+
+    @ReactProp(name = "centerTextRadiusPercent")
+    public void setCenterTextRadiusPercent(PieChart chart, float radiusPercent) {
+        chart.setCenterTextRadiusPercent(radiusPercent);
+    }
+
+    @ReactProp(name = "holeRadius")
+    public void setHoleRadius(PieChart chart, float percent) {
+        chart.setHoleRadius(percent);
+    }
+
+    @ReactProp(name = "holeColor")
+    public void setHoleColor(PieChart chart, String color) {
+        chart.setHoleColor(Color.parseColor(color));
+    }
+
+    @ReactProp(name = "transparentCircleRadius")
+    public void setTransparentCircleRadius(PieChart chart, float percent) {
+        chart.setTransparentCircleRadius(percent);
+    }
+
+    @ReactProp(name = "transparentCircleColor")
+    public void setTransparentCircleColor(PieChart chart, String color) {
+        chart.setTransparentCircleColor(Color.parseColor(color));
+    }
+
+    @ReactProp(name = "transparentCircleAlpha")
+    public void setTransparentCircleAlpha(PieChart chart, int alpha) {
+        chart.setTransparentCircleAlpha(alpha);
+    }
+
+    @ReactProp(name = "maxAngle")
+    public void setMaxAngle(PieChart chart, float maxAngle) {
+        chart.setMaxAngle(maxAngle);
+    }
+
 }

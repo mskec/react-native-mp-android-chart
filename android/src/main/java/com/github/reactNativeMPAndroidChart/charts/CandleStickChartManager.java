@@ -18,7 +18,7 @@ import com.github.reactNativeMPAndroidChart.utils.ChartDataSetConfigUtils;
 
 import java.util.ArrayList;
 
-public class CandleStickChartManager extends ChartBaseManager<CandleStickChart, CandleEntry> {
+public class CandleStickChartManager extends BarLineChartBaseManager<CandleStickChart, CandleEntry> {
 
     @Override
     public String getName() {

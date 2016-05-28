@@ -12,6 +12,17 @@ const iface = {
   propTypes: {
     ...ChartBase.propTypes,
 
+    drawSliceText: PropTypes.bool,
+    usePercentValues: PropTypes.bool,
+    centerText: PropTypes.string,
+    centerTextRadiusPercent: PropTypes.number,
+    holeRadius: PropTypes.number,
+    holeColor: PropTypes.string,
+    transparentCircleRadius: PropTypes.number,
+    transparentCircleColor: PropTypes.string,
+    transparentCircleAlpha: PropTypes.number,
+    maxAngle: PropTypes.number,
+
     // TODO PieChart should have only one dataset
     data: PropTypes.shape({
       datasets: PropTypes.arrayOf(PropTypes.shape({

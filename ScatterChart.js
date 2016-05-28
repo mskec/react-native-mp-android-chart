@@ -4,13 +4,13 @@ import {
   View
 } from 'react-native';
 
-import ChartBase from './ChartBase';
+import BarLineChartBase from './BarLineChartBase';
 import ChartDataSetConfig from './ChartDataSetConfig';
 
 const iface = {
   name: 'ScatterChart',
   propTypes: {
-    ...ChartBase.propTypes,
+    ...BarLineChartBase.propTypes,
 
     data: PropTypes.shape({
       datasets: PropTypes.arrayOf(PropTypes.shape({

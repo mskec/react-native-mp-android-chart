@@ -8,7 +8,9 @@ import {
 const chartDataSetConfig = {
   common: {
     color: PropTypes.string,
-    colors: PropTypes.arrayOf(PropTypes.string)
+    colors: PropTypes.arrayOf(PropTypes.string),
+
+    drawValues: PropTypes.bool
   },
 
   barLineScatterCandleBubble: {
