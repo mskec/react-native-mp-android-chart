@@ -1,6 +1,7 @@
 package com.github.reactNativeMPAndroidChart.utils;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
@@ -62,6 +63,23 @@ public class BridgeUtils {
         }
 
         return array;
+    }
+
+    /**
+     * fontStyle: NORMAL = 0, BOLD = 1, ITALIC = 2, BOLD_ITALIC = 3
+     */
+    public static Typeface parseTypeface(ReadableMap propMap, String styleKey, String familyKey) {
+        String fontFamily = null;
+        if (propMap.hasKey(familyKey)) {
+            fontFamily = propMap.getString(familyKey);
+        }
+
+        int style = 0;
+        if (propMap.hasKey(styleKey)) {
+            style = propMap.getInt(styleKey);
+        }
+
+        return Typeface.create(fontFamily, style);
     }
 
 }

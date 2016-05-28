@@ -1,7 +1,6 @@
 package com.github.reactNativeMPAndroidChart.charts;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
@@ -19,13 +18,11 @@ import com.github.reactNativeMPAndroidChart.utils.BridgeUtils;
 
 import java.util.ArrayList;
 
-public abstract class ChartBaseManager<T extends Chart<? extends ChartData<? extends IDataSet>>, U extends Entry> extends SimpleViewManager {
+public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends SimpleViewManager {
 
 
     /**
      * More details about legend customization: https://github.com/PhilJay/MPAndroidChart/wiki/Legend
-     *
-     * fontStyle: NORMAL = 0, BOLD = 1, ITALIC = 2, BOLD_ITALIC = 3
      */
     @ReactProp(name = "legend")
     public void setLegend(T chart, ReadableMap propMap) {
@@ -44,18 +41,7 @@ public abstract class ChartBaseManager<T extends Chart<? extends ChartData<? ext
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
                 BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
-
-            String fontFamily = null;
-            if (propMap.hasKey("fontFamily")) {
-                fontFamily = propMap.getString("fontFamily");
-            }
-
-            int style = 0;
-            if (propMap.hasKey("fontStyle")) {
-                style = propMap.getInt("fontStyle");
-            }
-
-            legend.setTypeface(Typeface.create(fontFamily, style));
+            legend.setTypeface(BridgeUtils.parseTypeface(propMap, "fontStyle", "fontFamily"));
         }
 
         // Wrapping / clipping avoidance
@@ -117,16 +103,53 @@ public abstract class ChartBaseManager<T extends Chart<? extends ChartData<? ext
         chart.invalidate();     // TODO is this necessary? Looks like enabled is not refreshing without it
     }
 
+    @ReactProp(name = "logEnabled")
+    public void setLogEnabled(Chart chart, boolean enabled) {
+        chart.setLogEnabled(enabled);
+    }
+
+    @ReactProp(name = "backgroundColor")
+    public void setBackgroundColor(Chart chart, String color) {
+        chart.setBackgroundColor(Color.parseColor(color));
+    }
+
     @ReactProp(name = "description")
-    public void setDescription(Chart<ChartData<IDataSet<U>>> chart, String description) {
-        chart.setDescription(description);
+    public void setDescription(Chart chart, ReadableMap propMap) {
+        if (BridgeUtils.validate(propMap, ReadableType.String, "text")) {
+            chart.setDescription(propMap.getString("text"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.String, "textColor")) {
+            chart.setDescriptionColor(Color.parseColor(propMap.getString("textColor")));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "textSize")) {
+            chart.setDescriptionTextSize((float) propMap.getDouble("textSize"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "positionX") &&
+                BridgeUtils.validate(propMap, ReadableType.Number, "positionY")) {
+
+            chart.setDescriptionPosition((float) propMap.getDouble("positionX"), (float) propMap.getDouble("positionY"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
+                BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
+            chart.setDescriptionTypeface(BridgeUtils.parseTypeface(propMap, "fontStyle", "fontFamily"));
+        }
+    }
+
+    @ReactProp(name = "noDataText")
+    public void setNoDataText(Chart chart, String noDataText) {
+        chart.setNoDataText(noDataText);
+    }
+
+    @ReactProp(name = "noDataTextDescription")
+    public void setNoDataTextDescription(Chart chart, String noDataTextDescription) {
+        chart.setNoDataTextDescription(noDataTextDescription);
     }
 
     /**
      * Animations docs: https://github.com/PhilJay/MPAndroidChart/wiki/Animations
-     */
+    */
     @ReactProp(name = "animation")
-    public void setAnimation(Chart<ChartData<IDataSet<U>>> chart, ReadableMap propMap) {
+    public void setAnimation(Chart chart, ReadableMap propMap) {
         Integer durationX = null;
         Integer durationY = null;
         EasingOption easingX = EasingOption.Linear;
@@ -160,7 +183,7 @@ public abstract class ChartBaseManager<T extends Chart<? extends ChartData<? ext
      * Dataset config details: https://github.com/PhilJay/MPAndroidChart/wiki/DataSet-classes-in-detail
      */
     @ReactProp(name = "data")
-    public void setData(Chart<ChartData<IDataSet<U>>> chart, ReadableMap propMap) {
+    public void setData(Chart chart, ReadableMap propMap) {
 
         if (!BridgeUtils.validate(propMap, ReadableType.Array, "xValues") ||
                 !BridgeUtils.validate(propMap, ReadableType.Array, "datasets")) {

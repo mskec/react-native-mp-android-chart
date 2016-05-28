@@ -10,8 +10,26 @@ const iface = {
     animation: PropTypes.shape({
       durationX: PropTypes.number,
       durationY: PropTypes.number,
+
       easingX: PropTypes.string,
       easingY: PropTypes.string
+    }),
+
+    backgroundColor: PropTypes.string,
+    logEnabled: PropTypes.bool,
+    noDataText: PropTypes.string,
+    noDataTextDescription: PropTypes.string,
+
+    description: PropTypes.shape({
+      text: PropTypes.string,
+      textColor: PropTypes.string,
+      textSize: PropTypes.number,
+
+      positionX: PropTypes.number,
+      positionY: PropTypes.number,
+
+      fontFamily: PropTypes.string,
+      fontStyle: PropTypes.number
     }),
 
     legend: PropTypes.shape({
@@ -36,9 +54,7 @@ const iface = {
         colors: PropTypes.arrayOf(PropTypes.string),
         labels: PropTypes.arrayOf(PropTypes.string)
       })
-    }),
-
-    description: PropTypes.string
+    })
   }
 };
 
