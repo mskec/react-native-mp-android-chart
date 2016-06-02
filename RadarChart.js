@@ -5,12 +5,15 @@ import {
 } from 'react-native';
 
 import ChartBase from './ChartBase';
+import {yAxisIface} from './YAxisIface';
 import ChartDataSetConfig from './ChartDataSetConfig';
 
 const iface = {
   name: 'RadarChart',
   propTypes: {
     ...ChartBase.propTypes,
+
+    yAxis: PropTypes.shape(yAxisIface),
 
     skipWebLineCount: PropTypes.number,
 

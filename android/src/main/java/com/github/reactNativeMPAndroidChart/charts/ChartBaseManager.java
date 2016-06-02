@@ -8,9 +8,13 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.animation.Easing.EasingOption;
 import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.Legend.LegendPosition;
+import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
@@ -177,6 +181,121 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         }
     }
 
+    /**
+     * xAxis config details: https://github.com/PhilJay/MPAndroidChart/wiki/XAxis
+     */
+    @ReactProp(name = "xAxis")
+    public void setXAxis(Chart chart, ReadableMap propMap) {
+        XAxis axis = chart.getXAxis();
+
+        setCommonAxisConfig(axis, propMap);
+
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "labelsToSkip")) {
+            axis.setLabelsToSkip(propMap.getInt("labelsToSkip"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "avoidFirstLastClipping")) {
+            axis.setAvoidFirstLastClipping(propMap.getBoolean("avoidFirstLastClipping"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "spaceBetweenLabels")) {
+            axis.setSpaceBetweenLabels(propMap.getInt("spaceBetweenLabels"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.String, "position")) {
+            axis.setPosition(XAxisPosition.valueOf(propMap.getString("position")));
+        }
+    }
+
+    /**
+     * General axis config details: https://github.com/PhilJay/MPAndroidChart/wiki/The-Axis
+     */
+    protected void setCommonAxisConfig(AxisBase axis, ReadableMap propMap) {
+        // what is drawn
+        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "enabled")) {
+            axis.setEnabled(propMap.getBoolean("enabled"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "drawLabels")) {
+            axis.setDrawLabels(propMap.getBoolean("drawLabels"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "drawAxisLine")) {
+            axis.setDrawAxisLine(propMap.getBoolean("drawAxisLine"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "drawGridLines")) {
+            axis.setDrawGridLines(propMap.getBoolean("drawGridLines"));
+        }
+
+        // style
+        if (BridgeUtils.validate(propMap, ReadableType.String, "textColor")) {
+            axis.setTextColor(Color.parseColor(propMap.getString("textColor")));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "textSize")) {
+            axis.setTextSize((float) propMap.getDouble("textSize"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
+                BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
+            axis.setTypeface(BridgeUtils.parseTypeface(propMap, "fontStyle", "fontFamily"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.String, "gridColor")) {
+            axis.setGridColor(Color.parseColor(propMap.getString("gridColor")));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "gridLineWidth")) {
+            axis.setGridLineWidth((float) propMap.getDouble("gridLineWidth"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.String, "axisLineColor")) {
+            axis.setAxisLineColor(Color.parseColor(propMap.getString("axisLineColor")));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "axisLineWidth")) {
+            axis.setAxisLineWidth((float) propMap.getDouble("axisLineWidth"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Map, "gridDashedLine")) {
+            ReadableMap gridDashedLine = propMap.getMap("gridDashedLine");
+            float lineLength = 0;
+            float spaceLength = 0;
+            float phase = 0;
+
+            if (BridgeUtils.validate(gridDashedLine, ReadableType.Number, "lineLength")) {
+                lineLength = (float) gridDashedLine.getDouble("lineLength");
+            }
+            if (BridgeUtils.validate(gridDashedLine, ReadableType.Number, "spaceLength")) {
+                spaceLength = (float) gridDashedLine.getDouble("spaceLength");
+            }
+            if (BridgeUtils.validate(gridDashedLine, ReadableType.Number, "phase")) {
+                phase = (float) gridDashedLine.getDouble("phase");
+            }
+
+            axis.enableGridDashedLine(lineLength, spaceLength, phase);
+        }
+
+        // limit lines
+        if (BridgeUtils.validate(propMap, ReadableType.Array, "limitLines")) {
+            ReadableArray limitLines = propMap.getArray("limitLines");
+
+            for (int i = 0; i < limitLines.size(); i++) {
+                if (!ReadableType.Map.equals(limitLines.getType(i))) {
+                    continue;
+                }
+
+                ReadableMap limitLineMap = limitLines.getMap(i);
+                if (BridgeUtils.validate(limitLineMap, ReadableType.Number, "limit")) {
+                    LimitLine limitLine = new LimitLine((float) limitLineMap.getDouble("limit"));
+
+                    if (BridgeUtils.validate(limitLineMap, ReadableType.String, "label")) {
+                        limitLine.setLabel(limitLineMap.getString("label"));
+                    }
+                    if (BridgeUtils.validate(limitLineMap, ReadableType.String, "lineColor")) {
+                        limitLine.setLineColor(Color.parseColor(limitLineMap.getString("lineColor")));
+                    }
+                    if (BridgeUtils.validate(limitLineMap, ReadableType.Number, "lineWidth")) {
+                        limitLine.setLineWidth((float) limitLineMap.getDouble("lineWidth"));
+                    }
+
+                    axis.addLimitLine(limitLine);
+                }
+
+            }
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "drawLimitLinesBehindData")) {
+            axis.setDrawLimitLinesBehindData(propMap.getBoolean("drawLimitLinesBehindData"));
+        }
+    }
 
     /**
      *

@@ -4,7 +4,9 @@ package com.github.reactNativeMPAndroidChart.charts;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.RadarChart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.RadarData;
@@ -14,7 +16,7 @@ import com.github.reactNativeMPAndroidChart.utils.ChartDataSetConfigUtils;
 
 import java.util.ArrayList;
 
-public class RadarChartManager extends ChartBaseManager<RadarChart, Entry> {
+public class RadarChartManager extends YAxisChartBase<RadarChart, Entry> {
 
     @Override
     public String getName() {
@@ -24,6 +26,15 @@ public class RadarChartManager extends ChartBaseManager<RadarChart, Entry> {
     @Override
     protected RadarChart createViewInstance(ThemedReactContext reactContext) {
         return new RadarChart(reactContext);
+    }
+
+    @Override
+    public void setYAxis(Chart chart, ReadableMap propMap) {
+        RadarChart radarChart = (RadarChart) chart;
+        YAxis axis = radarChart.getYAxis();
+
+        setCommonAxisConfig(axis, propMap);
+        setYAxisConfig(axis, propMap);
     }
 
     @Override

@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 
 import ChartBase from './ChartBase';
+import {yAxisIface} from './YAxisIface';
 
 const iface = {
   propTypes: {
@@ -18,7 +19,12 @@ const iface = {
 
     maxVisibleValueCount: PropTypes.number,
     autoScaleMinMaxEnabled: PropTypes.bool,
-    keepPositionOnRotation: PropTypes.bool
+    keepPositionOnRotation: PropTypes.bool,
+
+    yAxis: PropTypes.shape({
+      left: PropTypes.shape(yAxisIface),
+      right: PropTypes.shape(yAxisIface)
+    })
   }
 };
 

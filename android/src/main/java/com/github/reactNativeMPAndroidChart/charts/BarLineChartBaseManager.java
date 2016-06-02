@@ -1,11 +1,32 @@
 package com.github.reactNativeMPAndroidChart.charts;
 
 import android.graphics.Color;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.charts.BarLineChartBase;
+import com.github.mikephil.charting.charts.Chart;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
+import com.github.reactNativeMPAndroidChart.utils.BridgeUtils;
 
-public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U extends Entry> extends ChartBaseManager<T, U> {
+public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U extends Entry> extends YAxisChartBase<T, U> {
+
+    @Override
+    public void setYAxis(Chart chart, ReadableMap propMap) {
+        BarLineChartBase barLineChart = (BarLineChartBase) chart;
+
+        if (BridgeUtils.validate(propMap, ReadableType.Map, "left")) {
+            YAxis leftYAxis = barLineChart.getAxisLeft();
+            setCommonAxisConfig(leftYAxis, propMap.getMap("left"));
+            setYAxisConfig(leftYAxis, propMap.getMap("left"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Map, "right")) {
+            YAxis rightYAxis = barLineChart.getAxisRight();
+            setCommonAxisConfig(rightYAxis, propMap.getMap("right"));
+            setYAxisConfig(rightYAxis, propMap.getMap("right"));
+        }
+    }
 
     @ReactProp(name = "drawGridBackground")
     public void setDrawGridBackground(BarLineChartBase chart, boolean enabled) {
