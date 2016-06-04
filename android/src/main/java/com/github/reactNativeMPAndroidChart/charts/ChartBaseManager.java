@@ -303,13 +303,16 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
      */
     @ReactProp(name = "data")
     public void setData(Chart chart, ReadableMap propMap) {
-
-        if (!BridgeUtils.validate(propMap, ReadableType.Array, "xValues") ||
-                !BridgeUtils.validate(propMap, ReadableType.Array, "datasets")) {
+        if (!BridgeUtils.validate(propMap, ReadableType.Array, "datasets")) {
             return;
         }
 
-        ChartData<IDataSet<U>> chartData = createData(BridgeUtils.convertToStringArray(propMap.getArray("xValues")));
+        String[] xValues = new String[0];
+        if (BridgeUtils.validate(propMap, ReadableType.Array, "xValues")) {
+            xValues = BridgeUtils.convertToStringArray(propMap.getArray("xValues"));
+        }
+
+        ChartData<IDataSet<U>> chartData = createData(xValues);
 
         ReadableArray datasets = propMap.getArray("datasets");
         for (int i = 0; i < datasets.size(); i++) {
