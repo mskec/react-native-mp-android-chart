@@ -1,10 +1,10 @@
-import BarChart from './BarChart';
-import BubbleChart from './BubbleChart';
-import CandleStickChart from './CandleStickChart';
-import LineChart from './LineChart';
-import PieChart from './PieChart';
-import RadarChart from './RadarChart';
-import ScatterChart from './ScatterChart';
+import BarChart from './lib/BarChart';
+import BubbleChart from './lib/BubbleChart';
+import CandleStickChart from './lib/CandleStickChart';
+import LineChart from './lib/LineChart';
+import PieChart from './lib/PieChart';
+import RadarChart from './lib/RadarChart';
+import ScatterChart from './lib/ScatterChart';
 
 module.exports = {
   BarChart,
