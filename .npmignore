@@ -1,0 +1,6 @@
+.idea
+android/build/
+android/.gradle/
+android/gradle/
+android/gradlew
+android/gradlew.bat

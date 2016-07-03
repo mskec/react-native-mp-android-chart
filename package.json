@@ -1,13 +1,23 @@
 {
   "name": "react-native-mp-android-chart",
   "version": "0.0.0",
-  "description": "",
+  "description": "React Native wrapper around MPAndroidChart chart library",
   "main": "index.android.js",
-  "scripts": {
-  },
-  "author": "",
+  "author": "Martin Skec",
   "license": "MIT",
-  "dependencies": {
-    "react-native": "0.22.2"
-  }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mskec/react-native-mp-android-chart"
+  },
+  "keywords": [
+    "react native",
+    "charts",
+    "android",
+    "MPAndroidChart"
+  ],
+  "files": [
+    "android/",
+    "lib/",
+    "index.android.js"
+  ]
 }
