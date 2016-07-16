@@ -1,20 +1,24 @@
 # React Native MPAndroidChart
-
-`react-native-mp-android-chart` is react native wrapper of popular android charting library [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart).
+This library is React Native wrapper of popular Android charting library [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart).
 
 
 ## Table of contents
 - [Setup](#setup)
 - [Usage](#usage)
-- [Example](#example-app)
+- [Example](#example-application)
 
 ## Setup
+Library can be easily installed using NPM:
 `npm i react-native-mp-android-chart --save`
 
+Additional setup is required because library is using native Android code.
 **android/settings.gradle**
 ```
 include ':reactNativeMPAndroidChart'
-project(':reactNativeMPAndroidChart').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mp-android-chart/android')
+project(':reactNativeMPAndroidChart').projectDir = new File(
+  rootProject.projectDir,
+  '../node_modules/react-native-mp-android-chart/android'
+)
 ```
 
 **android/app/build.gradle**
@@ -44,9 +48,72 @@ protected List<ReactPackage> getPackages() {
 
 
 ## Usage
-TODO
+There are 8 supported charts with many configuration options.
+Example of how they are used and available configuration options
+ can be found in example [Android application](#example-application).
 
-## Example app
+Supported charts with examples:
+- [Bar](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/BarChartScreen.js)
+- [Bubble](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/BubbleChartScreen.js)
+- [Candle stick](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/CandleStickChartScreen.js)
+- [Line](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/LineChartScreen.js)
+- [Pie](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/PieChartScreen.js)
+- [Radar](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/RadarChartScreen.js)
+- [Scatter](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/ScatterChartScreen.js)
+- [Stacked bar](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/StackedBarChartScreen.js)
+
+### Example code
+This is simple example of how `BarChart` is used.
+```JavaScript
+import {BarChart} from 'react-native-mp-android-chart';
+
+class BarChartScreen extends React.Component {
+
+  constructor() {
+    super();
+
+    this.state = {
+      data: {
+        datasets: [{
+          yValues: [100, 105, 102, 110],
+          label: 'Data set 1',
+          config: {
+            color: 'teal'
+          }
+        }, {
+          yValues: [110, 100, 105, 108],
+          label: 'Data set 2',
+          config: {
+            color: 'orange'
+          }
+        }],
+        xValues: ['Q1', 'Q2', 'Q3', 'Q4']
+      }
+    };
+  }
+
+  render() {
+    return (
+      <View>
+        <BarChart
+          style={styles.chart}
+          data={this.state.data}
+          animation={{durationX: 2000}}
+        />
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  chart: {
+    height: 300,
+    width: 300
+  }
+});
+```
+
+## Example application
 Example Android application with source code and `apk` is available [here](https://github.com/mskec/react-native-mp-android-chart-example).
 
 ## License
