@@ -9,9 +9,11 @@ This library is React Native wrapper of popular Android charting library [MPAndr
 
 ## Setup
 Library can be easily installed using NPM:
+
 `npm i react-native-mp-android-chart --save`
 
 Additional setup is required because library is using native Android code.
+
 **android/settings.gradle**
 ```
 include ':reactNativeMPAndroidChart'
@@ -49,8 +51,10 @@ protected List<ReactPackage> getPackages() {
 
 ## Usage
 There are 8 supported charts with many configuration options.
-Example of how they are used and available configuration options
- can be found in example [Android application](#example-application).
+Almost all configuration available in base MPAndroidChart library are available through this wrapper. 
+More details on available configuration can be found on their [wiki](https://github.com/PhilJay/MPAndroidChart/wiki).
+
+Example of how charts are used and how to apply configuration can be found in example [Android application](#example-application).
 
 Supported charts with examples:
 - [Bar](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/BarChartScreen.js)
