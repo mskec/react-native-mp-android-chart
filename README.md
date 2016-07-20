@@ -14,6 +14,17 @@ Library can be easily installed using NPM:
 
 Additional setup is required because library is using native Android code.
 
+**android/build.gradle**
+```
+allprojects {
+    repositories {
+        ...
+
+        maven { url "https://jitpack.io" }    // used for MPAndroidChart
+    }
+}
+```
+
 **android/settings.gradle**
 ```
 include ':reactNativeMPAndroidChart'
@@ -26,12 +37,11 @@ project(':reactNativeMPAndroidChart').projectDir = new File(
 **android/app/build.gradle**
 ```
 dependencies {
-   ...
-   compile project(':reactNativeMPAndroidChart')
+    ...
+    compile project(':reactNativeMPAndroidChart')
 }
 ```
-
-**MainActivity.java**
+**MainApplication.java**
 
 On top where imports are:
 ```java
@@ -51,7 +61,7 @@ protected List<ReactPackage> getPackages() {
 
 ## Usage
 There are 8 supported charts with many configuration options.
-Almost all configuration available in base MPAndroidChart library are available through this wrapper. 
+Almost all configuration available in base MPAndroidChart library are available through this wrapper.
 More details on available configuration can be found on their [wiki](https://github.com/PhilJay/MPAndroidChart/wiki).
 
 Example of how charts are used and how to apply configuration can be found in example [Android application](#example-application).
