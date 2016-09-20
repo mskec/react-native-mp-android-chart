@@ -149,6 +149,21 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         chart.setNoDataTextDescription(noDataTextDescription);
     }
 
+    @ReactProp(name = "touchEnabled")
+    public void setTouchEnabled(Chart chart, boolean enabled) {
+        chart.setTouchEnabled(enabled);
+    }
+
+    @ReactProp(name = "dragDecelerationEnabled")
+    public void setDragDecelerationEnabled(Chart chart, boolean enabled) {
+        chart.setDragDecelerationEnabled(enabled);
+    }
+
+    @ReactProp(name = "dragDecelerationFrictionCoef")
+    public void setDragDecelerationFrictionCoef(Chart chart, float coef) {
+        chart.setDragDecelerationFrictionCoef(coef);
+    }
+
     /**
      * Animations docs: https://github.com/PhilJay/MPAndroidChart/wiki/Animations
     */

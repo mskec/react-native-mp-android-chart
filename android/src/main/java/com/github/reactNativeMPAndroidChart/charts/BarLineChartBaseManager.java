@@ -68,4 +68,34 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
         chart.setKeepPositionOnRotation(enabled);
     }
 
+    @ReactProp(name = "scaleEnabled")
+    public void setScaleEnabled(BarLineChartBase chart, boolean enabled) {
+        chart.setScaleEnabled(enabled);
+    }
+
+    @ReactProp(name = "dragEnabled")
+    public void setDragEnabled(BarLineChartBase chart, boolean enabled) {
+        chart.setDragEnabled(enabled);
+    }
+
+    @ReactProp(name = "scaleXEnabled")
+    public void setScaleXEnabled(BarLineChartBase chart, boolean enabled) {
+        chart.setScaleXEnabled(enabled);
+    }
+
+    @ReactProp(name = "scaleYEnabled")
+    public void setScaleYEnabled(BarLineChartBase chart, boolean enabled) {
+        chart.setScaleYEnabled(enabled);
+    }
+
+    @ReactProp(name = "pinchZoom")
+    public void setPinchZoom(BarLineChartBase chart, boolean enabled) {
+        chart.setPinchZoom(enabled);
+    }
+
+    @ReactProp(name = "doubleTapToZoomEnabled")
+    public void setDoubleTapToZoomEnabled(BarLineChartBase chart, boolean enabled) {
+        chart.setDoubleTapToZoomEnabled(enabled);
+    }
+
 }
