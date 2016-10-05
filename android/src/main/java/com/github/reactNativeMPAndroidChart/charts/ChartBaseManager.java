@@ -359,8 +359,10 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
     ArrayList<U> createEntries(ReadableArray yValues) {
         ArrayList<U> entries = new ArrayList<>(yValues.size());
         for (int j = 0; j < yValues.size(); j++) {
-            entries.add(createEntry(yValues, j));
-        }
+	    if (!yValues.isNull(j)) {
+		entries.add(createEntry(yValues, j));
+	    }
+	}
         return entries;
     }
 
