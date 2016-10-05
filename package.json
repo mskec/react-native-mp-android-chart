@@ -1,6 +1,6 @@
 {
   "name": "react-native-mp-android-chart",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Native wrapper around MPAndroidChart chart library",
   "main": "index.android.js",
   "author": "Martin Skec",
