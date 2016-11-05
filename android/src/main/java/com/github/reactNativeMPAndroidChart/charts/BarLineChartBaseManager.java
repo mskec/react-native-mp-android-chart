@@ -98,4 +98,19 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
         chart.setDoubleTapToZoomEnabled(enabled);
     }
 
+    @ReactProp(name = "zoom")
+    public void setDoubleTapToZoomEnabled(BarLineChartBase chart, ReadableMap propMap) {
+        YAxis.AxisDependency axisDependency = YAxis.AxisDependency.LEFT;
+        if (propMap.hasKey("axisDependency") &&
+                propMap.getString("axisDependency").equalsIgnoreCase("RIGHT")) {
+            axisDependency = YAxis.AxisDependency.RIGHT;
+        }
+        chart.zoom(
+                (float)propMap.getDouble("scaleX"),
+                (float)propMap.getDouble("scaleY"),
+                (float)propMap.getDouble("xValue"),
+                (float)propMap.getDouble("yValue"),
+                axisDependency
+        );
+    }
 }
