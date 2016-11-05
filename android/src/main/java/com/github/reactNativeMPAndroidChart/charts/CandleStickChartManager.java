@@ -1,6 +1,5 @@
 package com.github.reactNativeMPAndroidChart.charts;
 
-
 import android.graphics.Color;
 import android.graphics.Paint;
 import com.facebook.react.bridge.ReadableArray;
@@ -57,6 +56,12 @@ public class CandleStickChartManager extends BarLineChartBaseManager<CandleStick
         }
         if (BridgeUtils.validate(config, ReadableType.String, "shadowColor")) {
             candleDataSet.setShadowColor(Color.parseColor(config.getString("shadowColor")));
+        }
+        if (BridgeUtils.validate(config, ReadableType.Boolean, "shadowColorSameAsCandle")) {
+            candleDataSet.setShadowColorSameAsCandle(config.getBoolean("shadowColorSameAsCandle"));
+        }
+        if (BridgeUtils.validate(config, ReadableType.String, "neutralColor")) {
+            candleDataSet.setNeutralColor(Color.parseColor(config.getString("neutralColor")));
         }
         if (BridgeUtils.validate(config, ReadableType.String, "decreasingColor")) {
             candleDataSet.setDecreasingColor(Color.parseColor(config.getString("decreasingColor")));
