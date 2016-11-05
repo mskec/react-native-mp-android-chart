@@ -64,6 +64,8 @@ public abstract class YAxisChartBase<T extends Chart, U extends Entry> extends C
                 axis.setValueFormatter(new LargeValueFormatter());
             } else if ("percent".equals(valueFormatter)) {
                 axis.setValueFormatter(new PercentFormatter());
+            } else {
+                axis.setValueFormatter(new CustomFormatter(valueFormatter));
             }
         }
 
