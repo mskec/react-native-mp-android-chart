@@ -1,9 +1,12 @@
 package com.github.reactNativeMPAndroidChart.charts;
 
 import android.graphics.Color;
+import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.views.text.ReactFontManager;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.animation.Easing.EasingOption;
@@ -19,6 +22,7 @@ import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.reactNativeMPAndroidChart.utils.BridgeUtils;
+import com.github.reactNativeMPAndroidChart.R;
 
 import java.util.ArrayList;
 
@@ -216,6 +220,37 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "position")) {
             axis.setPosition(XAxisPosition.valueOf(propMap.getString("position")));
+        }
+    }
+
+    @ReactProp(name = "marker")
+    public void setMarker(Chart chart, ReadableMap propMap) {
+        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "enabled")) {
+            if (propMap.getBoolean("enabled")) {
+                MyMarkerView marker = new MyMarkerView(chart.getContext(), R.layout.custom_marker_view);
+                if (BridgeUtils.validate(propMap, ReadableType.String, "markerColor") &&
+                        android.os.Build.VERSION.SDK_INT >= 21) {
+                    marker.markerContent.setBackgroundTintList(
+                            ColorStateList.valueOf(Color.parseColor(propMap.getString("markerColor"))));
+                }
+                if (BridgeUtils.validate(propMap, ReadableType.String, "markerTextColor")) {
+                    marker.tvContent.setTextColor(Color.parseColor(propMap.getString("markerTextColor")));
+                }
+                if (BridgeUtils.validate(propMap, ReadableType.String, "markerFontName")) {
+                    Typeface face = ReactFontManager.getInstance().getTypeface(
+                            propMap.getString("markerFontName"),
+                            Typeface.NORMAL,
+                            chart.getContext().getAssets()
+                    );
+
+                    marker.tvContent.setTypeface(face);
+                }
+                if (BridgeUtils.validate(propMap, ReadableType.Number, "markerFontSize")) {
+                    marker.tvContent.setTextSize(propMap.getInt("markerFontSize"));
+                }
+
+                chart.setMarkerView(marker);
+            }
         }
     }
 
