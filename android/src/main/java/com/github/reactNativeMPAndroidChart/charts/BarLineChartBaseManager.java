@@ -99,18 +99,24 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
     }
 
     @ReactProp(name = "zoom")
-    public void setDoubleTapToZoomEnabled(BarLineChartBase chart, ReadableMap propMap) {
-        YAxis.AxisDependency axisDependency = YAxis.AxisDependency.LEFT;
-        if (propMap.hasKey("axisDependency") &&
-                propMap.getString("axisDependency").equalsIgnoreCase("RIGHT")) {
-            axisDependency = YAxis.AxisDependency.RIGHT;
+    public void setZoom(BarLineChartBase chart, ReadableMap propMap) {
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "scaleX") &&
+            BridgeUtils.validate(propMap, ReadableType.Number, "scaleY") &&
+            BridgeUtils.validate(propMap, ReadableType.Number, "xValue") &&
+            BridgeUtils.validate(propMap, ReadableType.Number, "yValue")) {
+
+            YAxis.AxisDependency axisDependency = YAxis.AxisDependency.LEFT;
+            if (propMap.hasKey("axisDependency") &&
+                    propMap.getString("axisDependency").equalsIgnoreCase("RIGHT")) {
+                axisDependency = YAxis.AxisDependency.RIGHT;
+            }
+            chart.zoom(
+                    (float) propMap.getDouble("scaleX"),
+                    (float) propMap.getDouble("scaleY"),
+                    (float) propMap.getDouble("xValue"),
+                    (float) propMap.getDouble("yValue"),
+                    axisDependency
+            );
         }
-        chart.zoom(
-                (float)propMap.getDouble("scaleX"),
-                (float)propMap.getDouble("scaleY"),
-                (float)propMap.getDouble("xValue"),
-                (float)propMap.getDouble("yValue"),
-                axisDependency
-        );
     }
 }
