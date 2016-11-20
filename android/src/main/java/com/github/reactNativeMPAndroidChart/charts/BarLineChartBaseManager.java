@@ -18,12 +18,12 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
 
         if (BridgeUtils.validate(propMap, ReadableType.Map, "left")) {
             YAxis leftYAxis = barLineChart.getAxisLeft();
-            setCommonAxisConfig(leftYAxis, propMap.getMap("left"));
+            setCommonAxisConfig(chart, leftYAxis, propMap.getMap("left"));
             setYAxisConfig(leftYAxis, propMap.getMap("left"));
         }
         if (BridgeUtils.validate(propMap, ReadableType.Map, "right")) {
             YAxis rightYAxis = barLineChart.getAxisRight();
-            setCommonAxisConfig(rightYAxis, propMap.getMap("right"));
+            setCommonAxisConfig(chart, rightYAxis, propMap.getMap("right"));
             setYAxisConfig(rightYAxis, propMap.getMap("right"));
         }
     }
@@ -110,6 +110,7 @@ public abstract class BarLineChartBaseManager<T extends BarLineChartBase, U exte
                     propMap.getString("axisDependency").equalsIgnoreCase("RIGHT")) {
                 axisDependency = YAxis.AxisDependency.RIGHT;
             }
+
             chart.zoom(
                     (float) propMap.getDouble("scaleX"),
                     (float) propMap.getDouble("scaleY"),

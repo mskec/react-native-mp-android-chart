@@ -33,7 +33,7 @@ public class RadarChartManager extends YAxisChartBase<RadarChart, Entry> {
         RadarChart radarChart = (RadarChart) chart;
         YAxis axis = radarChart.getYAxis();
 
-        setCommonAxisConfig(axis, propMap);
+        setCommonAxisConfig(chart, axis, propMap);
         setYAxisConfig(axis, propMap);
     }
 

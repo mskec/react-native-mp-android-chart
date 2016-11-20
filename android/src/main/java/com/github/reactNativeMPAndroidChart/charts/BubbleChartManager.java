@@ -53,13 +53,16 @@ public class BubbleChartManager extends ChartBaseManager<BubbleChart, BubbleEntr
 
     @Override
     BubbleEntry createEntry(ReadableArray yValues, int index) {
-        if (!ReadableType.Map.equals(yValues.getType(index)) ||
-                !BridgeUtils.validate(yValues.getMap(index), ReadableType.Number, "value") ||
-                !BridgeUtils.validate(yValues.getMap(index), ReadableType.Number, "size")) {
+        if (!ReadableType.Map.equals(yValues.getType(index))) {
             throw new IllegalArgumentException("Invalid BubbleEntry data");
         }
 
         ReadableMap entry = yValues.getMap(index);
+        if(!BridgeUtils.validate(entry, ReadableType.Number, "value") ||
+                !BridgeUtils.validate(entry, ReadableType.Number, "size")) {
+            throw new IllegalArgumentException("Invalid BubbleEntry data");
+        }
+
         float value = (float) entry.getDouble("value");
         float size = (float) entry.getDouble("size");
 

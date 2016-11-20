@@ -1,10 +1,12 @@
 package com.github.reactNativeMPAndroidChart.utils;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.views.text.ReactFontManager;
 
 public class BridgeUtils {
 
@@ -68,7 +70,7 @@ public class BridgeUtils {
     /**
      * fontStyle: NORMAL = 0, BOLD = 1, ITALIC = 2, BOLD_ITALIC = 3
      */
-    public static Typeface parseTypeface(ReadableMap propMap, String styleKey, String familyKey) {
+    public static Typeface parseTypeface(Context context, ReadableMap propMap, String styleKey, String familyKey) {
         String fontFamily = null;
         if (propMap.hasKey(familyKey)) {
             fontFamily = propMap.getString(familyKey);
@@ -79,7 +81,7 @@ public class BridgeUtils {
             style = propMap.getInt(styleKey);
         }
 
-        return Typeface.create(fontFamily, style);
+        return ReactFontManager.getInstance().getTypeface(fontFamily, style, context.getAssets());
     }
 
 }

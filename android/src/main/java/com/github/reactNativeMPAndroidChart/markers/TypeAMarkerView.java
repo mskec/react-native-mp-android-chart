@@ -1,4 +1,4 @@
-package com.github.reactNativeMPAndroidChart.charts;
+package com.github.reactNativeMPAndroidChart.markers;
 
 import android.content.Context;
 import android.widget.RelativeLayout;
@@ -12,35 +12,30 @@ import com.github.mikephil.charting.utils.Utils;
 import com.github.reactNativeMPAndroidChart.R;
 
 /**
- * Custom implementation of the MarkerView.
- *
- * @author Philipp Jahoda
+ * Type A marker.
  */
-public class MyMarkerView extends MarkerView {
+public class TypeAMarkerView extends MarkerView {
 
-    public RelativeLayout markerContent;
-    public TextView tvContent;
+    private RelativeLayout markerContent;
+    private TextView tvContent;
 
-    public MyMarkerView(Context context, int layoutResource) {
-        super(context, layoutResource);
+    public TypeAMarkerView(Context context) {
+        super(context, R.layout.type_a_marker_view);
 
-        tvContent = (TextView) findViewById(R.id.tvContent);
-        markerContent = (RelativeLayout) findViewById(R.id.markerContent);
+        tvContent = (TextView) findViewById(R.id.type_a_tvContent);
+        markerContent = (RelativeLayout) findViewById(R.id.type_a_markerContent);
     }
 
-    // callbacks everytime the MarkerView is redrawn, can be used to update the
-    // content (user-interface)
+    // callbacks every time the MarkerView is redrawn, can be used to update the content (user-interface)
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
-
         if (e instanceof CandleEntry) {
-
             CandleEntry ce = (CandleEntry) e;
 
-            tvContent.setText("" + Utils.formatNumber(ce.getHigh(), 0, true));
+            tvContent.setText(Utils.formatNumber(ce.getClose(), 2, true));
         } else {
 
-            tvContent.setText("" + Utils.formatNumber(e.getVal(), 0, true));
+            tvContent.setText(Utils.formatNumber(e.getVal(), 0, true));
         }
     }
 
@@ -54,5 +49,13 @@ public class MyMarkerView extends MarkerView {
     public int getYOffset(float ypos) {
         // this will cause the marker-view to be above the selected value
         return -getHeight();
+    }
+
+    public RelativeLayout getMarkerContent() {
+        return markerContent;
+    }
+
+    public TextView getTvContent() {
+        return tvContent;
     }
 }

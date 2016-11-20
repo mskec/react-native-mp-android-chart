@@ -2,11 +2,9 @@ package com.github.reactNativeMPAndroidChart.charts;
 
 import android.graphics.Color;
 import android.content.res.ColorStateList;
-import android.graphics.Typeface;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
-import com.facebook.react.views.text.ReactFontManager;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.animation.Easing.EasingOption;
@@ -21,8 +19,8 @@ import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
+import com.github.reactNativeMPAndroidChart.markers.TypeAMarkerView;
 import com.github.reactNativeMPAndroidChart.utils.BridgeUtils;
-import com.github.reactNativeMPAndroidChart.R;
 
 import java.util.ArrayList;
 
@@ -49,7 +47,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
                 BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
-            legend.setTypeface(BridgeUtils.parseTypeface(propMap, "fontStyle", "fontFamily"));
+            legend.setTypeface(BridgeUtils.parseTypeface(chart.getContext(), propMap, "fontStyle", "fontFamily"));
         }
 
         // Wrapping / clipping avoidance
@@ -139,7 +137,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
                 BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
-            chart.setDescriptionTypeface(BridgeUtils.parseTypeface(propMap, "fontStyle", "fontFamily"));
+            chart.setDescriptionTypeface(BridgeUtils.parseTypeface(chart.getContext(), propMap, "fontStyle", "fontFamily"));
         }
     }
 
@@ -207,7 +205,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
     public void setXAxis(Chart chart, ReadableMap propMap) {
         XAxis axis = chart.getXAxis();
 
-        setCommonAxisConfig(axis, propMap);
+        setCommonAxisConfig(chart, axis, propMap);
 
         if (BridgeUtils.validate(propMap, ReadableType.Number, "labelsToSkip")) {
             axis.setLabelsToSkip(propMap.getInt("labelsToSkip"));
@@ -225,39 +223,32 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
 
     @ReactProp(name = "marker")
     public void setMarker(Chart chart, ReadableMap propMap) {
-        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "enabled")) {
-            if (propMap.getBoolean("enabled")) {
-                MyMarkerView marker = new MyMarkerView(chart.getContext(), R.layout.custom_marker_view);
-                if (BridgeUtils.validate(propMap, ReadableType.String, "markerColor") &&
-                        android.os.Build.VERSION.SDK_INT >= 21) {
-                    marker.markerContent.setBackgroundTintList(
-                            ColorStateList.valueOf(Color.parseColor(propMap.getString("markerColor"))));
-                }
-                if (BridgeUtils.validate(propMap, ReadableType.String, "markerTextColor")) {
-                    marker.tvContent.setTextColor(Color.parseColor(propMap.getString("markerTextColor")));
-                }
-                if (BridgeUtils.validate(propMap, ReadableType.String, "markerFontName")) {
-                    Typeface face = ReactFontManager.getInstance().getTypeface(
-                            propMap.getString("markerFontName"),
-                            Typeface.NORMAL,
-                            chart.getContext().getAssets()
-                    );
-
-                    marker.tvContent.setTypeface(face);
-                }
-                if (BridgeUtils.validate(propMap, ReadableType.Number, "markerFontSize")) {
-                    marker.tvContent.setTextSize(propMap.getInt("markerFontSize"));
-                }
-
-                chart.setMarkerView(marker);
+        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "enabled") && propMap.getBoolean("enabled")) {
+            TypeAMarkerView marker = new TypeAMarkerView(chart.getContext());
+            if (android.os.Build.VERSION.SDK_INT >= 21 && BridgeUtils.validate(propMap, ReadableType.String, "color")) {
+                marker.getMarkerContent()
+                        .setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(propMap.getString("color"))));
             }
+            if (BridgeUtils.validate(propMap, ReadableType.String, "textColor")) {
+                marker.getTvContent().setTextColor(Color.parseColor(propMap.getString("textColor")));
+            }
+            if (BridgeUtils.validate(propMap, ReadableType.Number, "textSize")) {
+                marker.getTvContent().setTextSize(propMap.getInt("textSize"));
+            }
+            if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
+                    BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
+                marker.getTvContent()
+                        .setTypeface(BridgeUtils.parseTypeface(chart.getContext(), propMap, "fontStyle", "fontFamily"));
+            }
+
+            chart.setMarkerView(marker);
         }
     }
 
     /**
      * General axis config details: https://github.com/PhilJay/MPAndroidChart/wiki/The-Axis
      */
-    protected void setCommonAxisConfig(AxisBase axis, ReadableMap propMap) {
+    protected void setCommonAxisConfig(Chart chart, AxisBase axis, ReadableMap propMap) {
         // what is drawn
         if (BridgeUtils.validate(propMap, ReadableType.Boolean, "enabled")) {
             axis.setEnabled(propMap.getBoolean("enabled"));
@@ -281,7 +272,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
                 BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
-            axis.setTypeface(BridgeUtils.parseTypeface(propMap, "fontStyle", "fontFamily"));
+            axis.setTypeface(BridgeUtils.parseTypeface(chart.getContext(), propMap, "fontStyle", "fontFamily"));
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "gridColor")) {
             axis.setGridColor(Color.parseColor(propMap.getString("gridColor")));
