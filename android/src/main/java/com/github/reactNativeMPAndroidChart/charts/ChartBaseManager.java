@@ -1,7 +1,9 @@
 package com.github.reactNativeMPAndroidChart.charts;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.content.res.ColorStateList;
+import android.os.Build;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
@@ -19,9 +21,12 @@ import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
-import com.github.reactNativeMPAndroidChart.markers.TypeAMarkerView;
+import com.github.reactNativeMPAndroidChart.markers.OvalMarker;
+import com.github.reactNativeMPAndroidChart.markers.RNMarkerView;
+import com.github.reactNativeMPAndroidChart.markers.RectangleMarker;
 import com.github.reactNativeMPAndroidChart.utils.BridgeUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends SimpleViewManager {
@@ -223,26 +228,68 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
 
     @ReactProp(name = "marker")
     public void setMarker(Chart chart, ReadableMap propMap) {
-        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "enabled") && propMap.getBoolean("enabled")) {
-            TypeAMarkerView marker = new TypeAMarkerView(chart.getContext());
-            if (android.os.Build.VERSION.SDK_INT >= 21 && BridgeUtils.validate(propMap, ReadableType.String, "color")) {
-                marker.getMarkerContent()
-                        .setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(propMap.getString("color"))));
-            }
-            if (BridgeUtils.validate(propMap, ReadableType.String, "textColor")) {
-                marker.getTvContent().setTextColor(Color.parseColor(propMap.getString("textColor")));
-            }
-            if (BridgeUtils.validate(propMap, ReadableType.Number, "textSize")) {
-                marker.getTvContent().setTextSize(propMap.getInt("textSize"));
-            }
-            if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
-                    BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
-                marker.getTvContent()
-                        .setTypeface(BridgeUtils.parseTypeface(chart.getContext(), propMap, "fontStyle", "fontFamily"));
-            }
-
-            chart.setMarkerView(marker);
+        if (!BridgeUtils.validate(propMap, ReadableType.Boolean, "enabled") || !propMap.getBoolean("enabled")) {
+            chart.setMarkerView(null);
+            return;
         }
+
+        RNMarkerView marker = null;
+        String type = "rectangle";
+
+        if (BridgeUtils.validate(propMap, ReadableType.String, "type")) {
+            type = propMap.getString("type");
+        }
+
+        if ("rectangle".equals(type)) {
+            marker = new RectangleMarker(chart.getContext());
+
+        } else if ("oval".equals(type)) {
+            marker = new OvalMarker(chart.getContext());
+
+        } else {
+            try {
+                marker = (RNMarkerView) Class.forName(type)
+                        .getConstructor(Context.class)
+                        .newInstance(chart.getContext());
+
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (marker == null) {
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+                BridgeUtils.validate(propMap, ReadableType.String, "backgroundTint")) {
+            marker.getMarkerContent()
+                    .setBackgroundTintList(
+                            ColorStateList.valueOf(Color.parseColor(propMap.getString("backgroundTint")))
+                    );
+        }
+
+        if (BridgeUtils.validate(propMap, ReadableType.String, "textColor")) {
+            marker.getTvContent().setTextColor(Color.parseColor(propMap.getString("textColor")));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "textSize")) {
+            marker.getTvContent().setTextSize(propMap.getInt("textSize"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
+                BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
+            marker.getTvContent()
+                    .setTypeface(BridgeUtils.parseTypeface(chart.getContext(), propMap, "fontStyle", "fontFamily"));
+        }
+
+        chart.setMarkerView(marker);
     }
 
     /**

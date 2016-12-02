@@ -3,38 +3,30 @@ package com.github.reactNativeMPAndroidChart.markers;
 import android.content.Context;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.CandleEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.Utils;
-import com.github.reactNativeMPAndroidChart.R;
 
-/**
- * Type A marker.
- */
-public class TypeAMarkerView extends MarkerView {
+public abstract class RNMarkerView extends MarkerView {
 
     private RelativeLayout markerContent;
     private TextView tvContent;
 
-    public TypeAMarkerView(Context context) {
-        super(context, R.layout.type_a_marker_view);
+    public RNMarkerView(Context context, int layoutResource, int markerContentId, int tvContentId) {
+        super(context, layoutResource);
 
-        tvContent = (TextView) findViewById(R.id.type_a_tvContent);
-        markerContent = (RelativeLayout) findViewById(R.id.type_a_markerContent);
+        tvContent = (TextView) findViewById(tvContentId);
+        markerContent = (RelativeLayout) findViewById(markerContentId);
     }
 
-    // callbacks every time the MarkerView is redrawn, can be used to update the content (user-interface)
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
         if (e instanceof CandleEntry) {
             CandleEntry ce = (CandleEntry) e;
-
             tvContent.setText(Utils.formatNumber(ce.getClose(), 2, true));
         } else {
-
             tvContent.setText(Utils.formatNumber(e.getVal(), 0, true));
         }
     }
@@ -51,11 +43,11 @@ public class TypeAMarkerView extends MarkerView {
         return -getHeight();
     }
 
-    public RelativeLayout getMarkerContent() {
-        return markerContent;
-    }
-
     public TextView getTvContent() {
         return tvContent;
+    }
+
+    public RelativeLayout getMarkerContent() {
+        return markerContent;
     }
 }

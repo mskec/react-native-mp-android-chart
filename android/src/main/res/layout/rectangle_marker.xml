@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/type_a_markerContent"
+    android:id="@+id/rectangle_markerContent"
     android:layout_width="wrap_content"
     android:layout_height="40dp"
-    android:background="@drawable/type_a_marker" >
+    android:background="@drawable/rectangle_marker" >
 
     <TextView
-        android:id="@+id/type_a_tvContent"
+        android:id="@+id/rectangle_tvContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -17,7 +17,8 @@
         android:textSize="12sp"
         android:textColor="@android:color/white"
         android:ellipsize="end"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:maxLines="1"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+    />
 
 </RelativeLayout>
