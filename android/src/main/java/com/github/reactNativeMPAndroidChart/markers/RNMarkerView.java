@@ -3,10 +3,13 @@ package com.github.reactNativeMPAndroidChart.markers;
 import android.content.Context;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.facebook.react.bridge.ReadableMap;
 import com.github.mikephil.charting.components.MarkerView;
 import com.github.mikephil.charting.data.CandleEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.Utils;
 
 public abstract class RNMarkerView extends MarkerView {
@@ -23,24 +26,29 @@ public abstract class RNMarkerView extends MarkerView {
 
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
+        String text = "";
+
         if (e instanceof CandleEntry) {
             CandleEntry ce = (CandleEntry) e;
-            tvContent.setText(Utils.formatNumber(ce.getClose(), 2, true));
+            text = Utils.formatNumber(ce.getClose(), 2, true);
         } else {
-            tvContent.setText(Utils.formatNumber(e.getVal(), 0, true));
+            text = Utils.formatNumber(e.getY(), 0, true);
         }
+
+        if (e.getData() instanceof ReadableMap) {
+            if(((ReadableMap) e.getData()).hasKey("marker")) {
+                text = ((ReadableMap) e.getData()).getString("marker");
+            }
+        }
+
+        tvContent.setText(text);
+
+        super.refreshContent(e, highlight);
     }
 
     @Override
-    public int getXOffset(float xpos) {
-        // this will center the marker-view horizontally
-        return -(getWidth() / 2);
-    }
-
-    @Override
-    public int getYOffset(float ypos) {
-        // this will cause the marker-view to be above the selected value
-        return -getHeight();
+    public MPPointF getOffset() {
+        return new MPPointF( -(getWidth() / 2), -getHeight());
     }
 
     public TextView getTvContent() {

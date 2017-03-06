@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.content.res.ColorStateList;
 import android.os.Build;
+
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
@@ -12,14 +13,19 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.animation.Easing.EasingOption;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.Legend.LegendForm;
 import com.github.mikephil.charting.components.Legend.LegendPosition;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.reactNativeMPAndroidChart.markers.OvalMarker;
 import com.github.reactNativeMPAndroidChart.markers.RNMarkerView;
@@ -98,12 +104,19 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
                     String[] labels = BridgeUtils.convertToStringArray(labelsArray);
                     String[] colors = BridgeUtils.convertToStringArray(colorsArray);
 
-                    int[] colorsParsed = new int[colors.length];
-                    for (int i = 0; i < colors.length; i++) {
+                    int length = colors.length;
+
+                    int[] colorsParsed = new int[length];
+                    LegendEntry[] legendEntries = new LegendEntry[labels.length];
+                    for (int i = 0; i < length; i++) {
                         colorsParsed[i] = Color.parseColor(colors[i]);
+
+                        legendEntries[i] = new LegendEntry();
+                        legendEntries[i].formColor = colorsParsed[i];
+                        legendEntries[i].label = labels[i];
                     }
 
-                    legend.setCustom(colorsParsed, labels);
+                    legend.setCustom(legendEntries);
                 }
             }
         }
@@ -126,34 +139,33 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
 
     @ReactProp(name = "description")
     public void setDescription(Chart chart, ReadableMap propMap) {
+
+        Description description = new Description();
+
         if (BridgeUtils.validate(propMap, ReadableType.String, "text")) {
-            chart.setDescription(propMap.getString("text"));
+            description.setText(propMap.getString("text"));
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "textColor")) {
-            chart.setDescriptionColor(Color.parseColor(propMap.getString("textColor")));
+            description.setTextColor(Color.parseColor(propMap.getString("textColor")));
         }
         if (BridgeUtils.validate(propMap, ReadableType.Number, "textSize")) {
-            chart.setDescriptionTextSize((float) propMap.getDouble("textSize"));
+            description.setTextSize((float) propMap.getDouble("textSize"));
         }
         if (BridgeUtils.validate(propMap, ReadableType.Number, "positionX") &&
                 BridgeUtils.validate(propMap, ReadableType.Number, "positionY")) {
-
-            chart.setDescriptionPosition((float) propMap.getDouble("positionX"), (float) propMap.getDouble("positionY"));
+            description.setPosition((float) propMap.getDouble("positionX"), (float) propMap.getDouble("positionY"));
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "fontFamily") ||
                 BridgeUtils.validate(propMap, ReadableType.Number, "fontStyle")) {
-            chart.setDescriptionTypeface(BridgeUtils.parseTypeface(chart.getContext(), propMap, "fontStyle", "fontFamily"));
+            description.setTypeface(BridgeUtils.parseTypeface(chart.getContext(), propMap, "fontStyle", "fontFamily"));
         }
+
+        chart.setDescription(description);
     }
 
     @ReactProp(name = "noDataText")
     public void setNoDataText(Chart chart, String noDataText) {
         chart.setNoDataText(noDataText);
-    }
-
-    @ReactProp(name = "noDataTextDescription")
-    public void setNoDataTextDescription(Chart chart, String noDataTextDescription) {
-        chart.setNoDataTextDescription(noDataTextDescription);
     }
 
     @ReactProp(name = "touchEnabled")
@@ -173,7 +185,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
 
     /**
      * Animations docs: https://github.com/PhilJay/MPAndroidChart/wiki/Animations
-    */
+     */
     @ReactProp(name = "animation")
     public void setAnimation(Chart chart, ReadableMap propMap) {
         Integer durationX = null;
@@ -212,14 +224,11 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
 
         setCommonAxisConfig(chart, axis, propMap);
 
-        if (BridgeUtils.validate(propMap, ReadableType.Number, "labelsToSkip")) {
-            axis.setLabelsToSkip(propMap.getInt("labelsToSkip"));
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "labelRotationAngle")) {
+            axis.setLabelRotationAngle((float) propMap.getDouble("labelRotationAngle"));
         }
         if (BridgeUtils.validate(propMap, ReadableType.Boolean, "avoidFirstLastClipping")) {
             axis.setAvoidFirstLastClipping(propMap.getBoolean("avoidFirstLastClipping"));
-        }
-        if (BridgeUtils.validate(propMap, ReadableType.Number, "spaceBetweenLabels")) {
-            axis.setSpaceBetweenLabels(propMap.getInt("spaceBetweenLabels"));
         }
         if (BridgeUtils.validate(propMap, ReadableType.String, "position")) {
             axis.setPosition(XAxisPosition.valueOf(propMap.getString("position")));
@@ -229,7 +238,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
     @ReactProp(name = "marker")
     public void setMarker(Chart chart, ReadableMap propMap) {
         if (!BridgeUtils.validate(propMap, ReadableType.Boolean, "enabled") || !propMap.getBoolean("enabled")) {
-            chart.setMarkerView(null);
+            chart.setMarker(null);
             return;
         }
 
@@ -289,7 +298,7 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
                     .setTypeface(BridgeUtils.parseTypeface(chart.getContext(), propMap, "fontStyle", "fontFamily"));
         }
 
-        chart.setMarkerView(marker);
+        chart.setMarker(marker);
     }
 
     /**
@@ -383,64 +392,94 @@ public abstract class ChartBaseManager<T extends Chart, U extends Entry> extends
         if (BridgeUtils.validate(propMap, ReadableType.Boolean, "drawLimitLinesBehindData")) {
             axis.setDrawLimitLinesBehindData(propMap.getBoolean("drawLimitLinesBehindData"));
         }
+
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "axisMaxValue")) {
+            axis.setAxisMaximum((float) propMap.getDouble("axisMaxValue"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "axisMinValue")) {
+            axis.setAxisMinimum((float) propMap.getDouble("axisMinValue"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "granularity")) {
+            axis.setGranularity((float) propMap.getDouble("granularity"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "granularityEnabled")) {
+            axis.setGranularityEnabled(propMap.getBoolean("granularityEnabled"));
+        }
+        if (BridgeUtils.validate(propMap, ReadableType.Number, "labelCount")) {
+            boolean labelCountForce = false;
+            if (BridgeUtils.validate(propMap, ReadableType.Boolean, "labelCountForce")) {
+                labelCountForce = propMap.getBoolean("labelCountForce");
+            }
+            axis.setLabelCount(propMap.getInt("labelCount"), labelCountForce);
+        }
+
+        // formatting
+        if (BridgeUtils.validate(propMap, ReadableType.String, "valueFormatter")) {
+            String valueFormatter = propMap.getString("valueFormatter");
+
+            if ("largeValue".equals(valueFormatter)) {
+                axis.setValueFormatter(new LargeValueFormatter());
+            } else if ("percent".equals(valueFormatter)) {
+                axis.setValueFormatter(new PercentFormatter());
+            } else {
+                axis.setValueFormatter(new CustomFormatter(valueFormatter));
+            }
+        } else if (BridgeUtils.validate(propMap, ReadableType.Array, "valueFormatter")) {
+            axis.setValueFormatter(new IndexAxisValueFormatter(BridgeUtils.convertToStringArray(propMap.getArray("valueFormatter"))));
+        }
     }
 
     /**
-     *
      * Dataset config details: https://github.com/PhilJay/MPAndroidChart/wiki/DataSet-classes-in-detail
      */
     @ReactProp(name = "data")
     public void setData(Chart chart, ReadableMap propMap) {
-        if (!BridgeUtils.validate(propMap, ReadableType.Array, "datasets")) {
+        if (!BridgeUtils.validate(propMap, ReadableType.Array, "dataSets")) {
             return;
         }
 
-        String[] xValues = new String[0];
-        if (BridgeUtils.validate(propMap, ReadableType.Array, "xValues")) {
-            xValues = BridgeUtils.convertToStringArray(propMap.getArray("xValues"));
-        }
+        ChartData<IDataSet<U>> chartData = createData();
 
-        ChartData<IDataSet<U>> chartData = createData(xValues);
-
-        ReadableArray datasets = propMap.getArray("datasets");
-        for (int i = 0; i < datasets.size(); i++) {
-            ReadableMap dataset = datasets.getMap(i);
+        ReadableArray dataSets = propMap.getArray("dataSets");
+        for (int i = 0; i < dataSets.size(); i++) {
+            ReadableMap dataSet = dataSets.getMap(i);
 
             // TODO validation
-            ReadableArray yValues = dataset.getArray("yValues");
-            String label = dataset.getString("label");
+            ReadableArray values = dataSet.getArray("values");
+            String label = dataSet.getString("label");
 
-            ArrayList<U> entries = createEntries(yValues);
+            ArrayList<U> entries = createEntries(values);
 
             IDataSet<U> lineDataSet = createDataSet(entries, label);
 
-            if (BridgeUtils.validate(dataset, ReadableType.Map, "config")) {
-                dataSetConfig(lineDataSet, dataset.getMap("config"));
+            if (BridgeUtils.validate(dataSet, ReadableType.Map, "config")) {
+                dataSetConfig(lineDataSet, dataSet.getMap("config"));
             }
 
             chartData.addDataSet(lineDataSet);
         }
 
         chart.setData(chartData);
+
         chart.invalidate();
     }
 
-    abstract ChartData<IDataSet<U>> createData(String[] xValues);
+    abstract ChartData<IDataSet<U>> createData();
+
     abstract IDataSet<U> createDataSet(ArrayList<U> entries, String label);
+
     abstract void dataSetConfig(IDataSet<U> dataSet, ReadableMap config);
 
     ArrayList<U> createEntries(ReadableArray yValues) {
         ArrayList<U> entries = new ArrayList<>(yValues.size());
         for (int j = 0; j < yValues.size(); j++) {
-	    if (!yValues.isNull(j)) {
-		entries.add(createEntry(yValues, j));
-	    }
-	}
+            if (!yValues.isNull(j)) {
+                entries.add(createEntry(yValues, j));
+            }
+        }
         return entries;
     }
 
-    U createEntry(ReadableArray yValues, int index) {
-        return (U) new Entry((float) yValues.getDouble(index), index);
-    }
+    abstract U createEntry(ReadableArray values, int index);
 
 }

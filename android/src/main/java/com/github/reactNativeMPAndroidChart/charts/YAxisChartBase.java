@@ -20,12 +20,7 @@ public abstract class YAxisChartBase<T extends Chart, U extends Entry> extends C
     public abstract void setYAxis(Chart chart, ReadableMap propMap);
 
     protected void setYAxisConfig(YAxis axis, ReadableMap propMap) {
-        if (BridgeUtils.validate(propMap, ReadableType.Number, "axisMaxValue")) {
-            axis.setAxisMaxValue((float) propMap.getDouble("axisMaxValue"));
-        }
-        if (BridgeUtils.validate(propMap, ReadableType.Number, "axisMinValue")) {
-            axis.setAxisMinValue((float) propMap.getDouble("axisMinValue"));
-        }
+
         if (BridgeUtils.validate(propMap, ReadableType.Boolean, "inverted")) {
             axis.setInverted(propMap.getBoolean("inverted"));
         }
@@ -35,38 +30,8 @@ public abstract class YAxisChartBase<T extends Chart, U extends Entry> extends C
         if (BridgeUtils.validate(propMap, ReadableType.Number, "spaceBottom")) {
             axis.setSpaceBottom((float) propMap.getDouble("spaceBottom"));
         }
-        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "showOnlyMinMax")) {
-            axis.setShowOnlyMinMax(propMap.getBoolean("showOnlyMinMax"));
-        }
-        if (BridgeUtils.validate(propMap, ReadableType.Number, "labelCount")) {
-            boolean labelCountForce = false;
-            if (BridgeUtils.validate(propMap, ReadableType.Boolean, "labelCountForce")) {
-                labelCountForce = propMap.getBoolean("labelCountForce");
-            }
-            axis.setLabelCount(propMap.getInt("labelCount"), labelCountForce);
-        }
         if (BridgeUtils.validate(propMap, ReadableType.String, "position")) {
             axis.setPosition(YAxis.YAxisLabelPosition.valueOf(propMap.getString("position")));
-        }
-        if (BridgeUtils.validate(propMap, ReadableType.Number, "granularity")) {
-            axis.setGranularity((float) propMap.getDouble("granularity"));
-        }
-        if (BridgeUtils.validate(propMap, ReadableType.Boolean, "granularityEnabled")) {
-            axis.setGranularityEnabled(propMap.getBoolean("granularityEnabled"));
-        }
-
-
-        // formatting
-        if (BridgeUtils.validate(propMap, ReadableType.String, "valueFormatter")) {
-            String valueFormatter = propMap.getString("valueFormatter");
-
-            if ("largeValue".equals(valueFormatter)) {
-                axis.setValueFormatter(new LargeValueFormatter());
-            } else if ("percent".equals(valueFormatter)) {
-                axis.setValueFormatter(new PercentFormatter());
-            } else {
-                axis.setValueFormatter(new CustomFormatter(valueFormatter));
-            }
         }
 
         // TODO docs says the remaining config needs to be applied before setting data. Test it

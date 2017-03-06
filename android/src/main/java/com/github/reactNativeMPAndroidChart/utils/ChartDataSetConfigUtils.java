@@ -28,6 +28,11 @@ public class ChartDataSetConfigUtils {
         if (BridgeUtils.validate(config, ReadableType.Boolean, "drawValues")) {
             dataSet.setDrawValues(config.getBoolean("drawValues"));
         }
+
+        if(BridgeUtils.validate(config, ReadableType.Boolean, "highlightEnabled")) {
+            dataSet.setHighlightEnabled(config.getBoolean("highlightEnabled"));
+        }
+
     }
 
     public static void commonBarLineScatterCandleBubbleConfig(BarLineScatterCandleBubbleDataSet dataSet, ReadableMap config) {

@@ -2,6 +2,7 @@ package com.github.reactNativeMPAndroidChart.charts;
 
 import android.graphics.Color;
 import android.view.View;
+
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableType;
@@ -15,6 +16,7 @@ import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.interfaces.datasets.IDataSet;
 import com.github.reactNativeMPAndroidChart.utils.BridgeUtils;
 import com.github.reactNativeMPAndroidChart.utils.ChartDataSetConfigUtils;
+import com.github.reactNativeMPAndroidChart.utils.DataSetUtils;
 
 import java.util.ArrayList;
 
@@ -33,8 +35,8 @@ public class BarChartManager extends BarLineChartBaseManager<BarChart, BarEntry>
     }
 
     @Override
-    ChartData createData(String[] xValues) {
-        return new BarData(xValues);
+    ChartData createData() {
+        return new BarData();
     }
 
     @Override
@@ -43,18 +45,8 @@ public class BarChartManager extends BarLineChartBaseManager<BarChart, BarEntry>
     }
 
     @Override
-    BarEntry createEntry(ReadableArray yValues, int index) {
-        BarEntry entry;
-
-        if (ReadableType.Array.equals(yValues.getType(index))) {
-            entry = new BarEntry(BridgeUtils.convertToFloatArray(yValues.getArray(index)), index);
-        } else if (ReadableType.Number.equals(yValues.getType(index))) {
-            entry = new BarEntry((float) yValues.getDouble(index), index);
-        } else {
-            throw new IllegalArgumentException("Unexpected entry type: " + yValues.getType(index));
-        }
-
-        return entry;
+    BarEntry createEntry(ReadableArray values, int index) {
+        return DataSetUtils.createBarEntry(values, index);
     }
 
     @Override
@@ -64,9 +56,6 @@ public class BarChartManager extends BarLineChartBaseManager<BarChart, BarEntry>
         ChartDataSetConfigUtils.commonConfig(barDataSet, config);
         ChartDataSetConfigUtils.commonBarLineScatterCandleBubbleConfig(barDataSet, config);
 
-        if (BridgeUtils.validate(config, ReadableType.Number, "barSpacePercent")) {
-            barDataSet.setBarSpacePercent((float) config.getDouble("barSpacePercent"));
-        }
         if (BridgeUtils.validate(config, ReadableType.String, "barShadowColor")) {
             barDataSet.setBarShadowColor(Color.parseColor(config.getString("barShadowColor")));
         }
@@ -76,6 +65,7 @@ public class BarChartManager extends BarLineChartBaseManager<BarChart, BarEntry>
         if (BridgeUtils.validate(config, ReadableType.Array, "stackLabels")) {
             barDataSet.setStackLabels(BridgeUtils.convertToStringArray(config.getArray("stackLabels")));
         }
+
     }
 
     @ReactProp(name = "drawValueAboveBar")
@@ -88,8 +78,4 @@ public class BarChartManager extends BarLineChartBaseManager<BarChart, BarEntry>
         chart.setDrawBarShadow(enabled);
     }
 
-    @ReactProp(name = "drawHighlightArrow")
-    public void setDrawHighlightArrow(BarChart chart, boolean enabled) {
-        chart.setDrawHighlightArrow(enabled);
-    }
 }

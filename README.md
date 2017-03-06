@@ -1,7 +1,6 @@
 # React Native MPAndroidChart
 This library is React Native wrapper of popular Android charting library [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart).
 
-
 ## Table of contents
 - [Setup](#setup)
 - [Usage](#usage)
@@ -71,10 +70,12 @@ Supported charts with examples:
 - [Bubble](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/BubbleChartScreen.js)
 - [Candle stick](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/CandleStickChartScreen.js)
 - [Line](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/LineChartScreen.js)
+- [Discrete Line With Custom Marker Text](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/TimeSeriesLineChartScreen.js)
 - [Pie](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/PieChartScreen.js)
 - [Radar](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/RadarChartScreen.js)
 - [Scatter](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/ScatterChartScreen.js)
 - [Stacked bar](https://github.com/mskec/react-native-mp-android-chart-example/blob/master/app/StackedBarChartScreen.js)
+
 
 ### Example code
 This is simple example of how `BarChart` is used.
@@ -89,19 +90,19 @@ class BarChartScreen extends React.Component {
     this.state = {
       data: {
         datasets: [{
-          yValues: [100, 105, 102, 110],
+          values: [{y:100}, {y:105}, {y:102}, {y:110}],
           label: 'Data set 1',
           config: {
             color: 'teal'
           }
         }, {
-          yValues: [110, 100, 105, 108],
+          values: [{y:110}, {y:100}, {y:105}, {y:108}],
           label: 'Data set 2',
           config: {
             color: 'orange'
           }
         }],
-        xValues: ['Q1', 'Q2', 'Q3', 'Q4']
+        xLabels: ['Q1', 'Q2', 'Q3', 'Q4']
       }
     };
   }

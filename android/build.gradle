@@ -36,5 +36,5 @@ allprojects {
 dependencies {
     compile 'com.facebook.react:react-native:0.20.+'
 
-    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
 }

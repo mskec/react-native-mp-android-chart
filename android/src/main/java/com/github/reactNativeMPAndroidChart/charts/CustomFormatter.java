@@ -1,9 +1,9 @@
 package com.github.reactNativeMPAndroidChart.charts;
 
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.formatter.YAxisValueFormatter;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
-public class CustomFormatter implements YAxisValueFormatter {
+public class CustomFormatter implements IAxisValueFormatter {
 
     private String mFormat;
 
@@ -12,7 +12,7 @@ public class CustomFormatter implements YAxisValueFormatter {
     }
 
     @Override
-    public String getFormattedValue(float value, YAxis yAxis) {
+    public String getFormattedValue(float value, AxisBase yAxis) {
         return String.format(mFormat, value);
     }
 }
